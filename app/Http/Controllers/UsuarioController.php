@@ -134,8 +134,29 @@ class UsuarioController extends Controller
 
     public function mostrarMiPerfil()
     {
-        $usuario = Usuario::with('contacto.persona')->find(session('usuario')->id);
-        return view('auth.miPerfil', compact('usuario'));
+        $usuario = Usuario::with([
+            'contacto.persona.sexo',
+            'contacto.persona.documentos.tipoDocumento',
+        ])->find(session('usuario')->id);
+
+
+        $mensaje = 'No disponible';
+
+        $persona = $usuario->contacto->persona ?? null;
+
+        $documento = $persona?->documentos?->first();
+
+        $data = [
+            'usuario' => $usuario ?? null,
+            'nombre' => $persona?->nombre ?? $mensaje,
+            'apellido' => $persona?->apellido ?? $mensaje,
+            'tipo_documento' => $documento?->tipoDocumento?->descripcion ?? $mensaje,
+            'numero_documento' => $documento?->descripcion ?? $mensaje,
+            'sexo' => $persona?->sexo?->descripcion ?? $mensaje,
+            'fecha_nacimiento' => $persona?->fecha_nacimiento ?? $mensaje,
+        ];
+        // return response()->json($data);
+        return view('auth.miPerfil', $data);
     }
 
     public function cambiarContrasena(Request $request) {

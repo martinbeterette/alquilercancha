@@ -120,9 +120,7 @@ Route::prefix('tablas-maestras')->group(function () {
 
 //mi perfil
 Route::get('/mi-perfil', [UsuarioController::class, 'mostrarMiPerfil'])->name('miPerfil');
-Route::get('/perfil/cambiar-contraseña', function () {
-    return view('auth/cambiarContrasena');
-})->name('actualizarContrasena');
+Route::get('/perfil/cambiar-contraseña', fn() => view('auth/cambiarContrasena'))->name('actualizarContrasena');
 Route::post('/perfil/cambiar-contraseña', [UsuarioController::class, 'cambiarContrasena'])->name('cambiarContrasena');
 
 

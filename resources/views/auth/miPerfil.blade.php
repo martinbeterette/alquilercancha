@@ -7,7 +7,6 @@
 @endsection
 
 @section('content')
-    @php $mensaje = ' No asignado' @endphp
     <div class="container my-5">
         <h2 class="mb-4">Mi Perfil</h2>
         
@@ -33,12 +32,12 @@
                 <div class="card shadow-3">
                     <div class="card-body">
                         <h5 class="card-title mb-3"><i class="fas fa-id-card me-2"></i> Datos Personales</h5>
-                        <p><strong>Nombre:</strong>{{ $usuario->persona->nombre ?? $mensaje }}</p>
-                        <p><strong>Apellido:</strong>{{ $usuario->persona->apellido ?? $mensaje }}</p>
-                        <p><strong>Tipo de Documento:</strong>{{ $usuario->documento->tipo_documento ?? $mensaje }}</p>
-                        <p><strong>Número de Documento:</strong>{{ $usuario->documento->descripcion ?? $mensaje }}</p>
-                        <p><strong>Sexo:</strong>{{ $usuario->sexo->descripcion ?? $mensaje }}</p>
-                        <p><strong>Fecha de Nacimiento:</strong>{{ $usuario->persona->fecha_nacimiento ?? $mensaje }}</p>
+                        <p><strong>Nombre:</strong> {{ $nombre }}</p>
+                        <p><strong>Apellido:</strong> {{ $apellido }}</p>
+                        <p><strong>Tipo de Documento:</strong> {{ $tipo_documento }}</p>
+                        <p><strong>Número de Documento:</strong> {{ $numero_documento }}</p>
+                        <p><strong>Sexo:</strong> {{ $sexo }}</p>
+                        <p><strong>Fecha de Nacimiento:</strong> {{ $fecha_nacimiento }}</p>
                     </div>
                 </div>
             </div>
