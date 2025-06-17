@@ -25,14 +25,16 @@ class PreAjustesSeeder extends Seeder
         ]);
 
         // Estado Zona
-        DB::table('rela_estado_zona')->insert([
-            'descripcion' => 'Buen Estado',
-            'created_at' => $now,
-            'updated_at' => $now
-        ], [
-            'descripcion' => 'Mal Estado',
-            'created_at' => $now,
-            'updated_at' => $now
+        DB::table('estado_zona')->insert([
+            [
+                'descripcion' => 'Buen Estado',
+                'created_at' => $now,
+                'updated_at' => $now
+            ], [
+                'descripcion' => 'Mal Estado',
+                'created_at' => $now,
+                'updated_at' => $now
+            ]
         ]);
         
 

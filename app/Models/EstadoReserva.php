@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
-class TipoZona extends Model
+class EstadoReserva extends Model
 {
     use SoftDeletes;
-    
-    protected $table = 'tipo_zona';
-    protected $fillable = ['descripcion'];
 
-    public function zonas()
+    protected $fillable = ['descripcion'];
+    protected $table = 'estado_reserva';
+
+    public function reservas() 
     {
-        return $this->hasMany(Zona::class, 'rela_tipo_zona');
+        return $this->hasMany(Reserva::class, 'rela_estado_reserva');
     }
 }

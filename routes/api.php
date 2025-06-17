@@ -26,11 +26,11 @@ Route::get('/personas/{id}',        [PersonaController::class, 'show']);
 Route::put('/personas/{id}',        [PersonaController::class, 'update']);
 Route::delete('/personas/{id}',     [PersonaController::class, 'destroy']);
 
-Route::get('tipo-contactos',        [TipoContactoController::class, 'indexApi']);
-Route::post('tipo-contactos',       [TipoContactoController::class, 'store']);
+Route::get('tipo-contacto',        [TipoContactoController::class, 'indexApi']);
+Route::post('tipo-contacto',       [TipoContactoController::class, 'store']);
 
-Route::get('tipo-documentos',       [TipoDocumentoController::class, 'indexApi']);
-Route::post('tipo-documentos',      [TipoDocumentoController::class, 'store']);
+Route::get('tipo-documento',       [TipoDocumentoController::class, 'indexApi']);
+Route::post('tipo-documento',      [TipoDocumentoController::class, 'store']);
 
 Route::get('contactos',             [ContactoController::class, 'index']);
 Route::post('contactos',            [ContactoController::class, 'store']);
@@ -52,6 +52,6 @@ Route::get('superficie',            [SuperficieController::class, 'indexApi']);
 
 Route::get('tipo-zona',             [TipoZonaController::class, 'indexApi']);
 
-// Route::get('estado-reserva',             [EstadoReservaController::class, 'indexApi']);
+Route::get('estado-reserva',             [EstadoReservaController::class, 'indexApi']);
 
 Route::get('estado-zona',             [EstadoZonaController::class, 'indexApi']);

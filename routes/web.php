@@ -11,7 +11,10 @@ use App\Http\Controllers\SucursalController;
 use App\Http\Controllers\DeporteController;
 use App\Http\Controllers\SexoController;
 use App\Http\Controllers\SuperficieController;
-
+use App\Http\Controllers\TipoContactoController;
+use App\Http\Controllers\TipoDocumentoController;
+use App\Http\Controllers\TipoZonaController;
+use App\Http\Controllers\EstadoReservaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,11 +39,6 @@ Route::post('/registrar-usuario', [AuthController::class, 'recibirFormularioRegi
 //prueba
 Route::get('/home', [HomeController::class, 'home']);
 
-// TABLAS MAESTRAS CATALOGO
-Route::get('/tablas-maestras', function () {
-    return view('tablasMaestras/tablasMaestras');
-});
-
 // SUCURSALES
 Route::get('/sucursales', [SucursalController::class, 'index'])->name('sucursal.index');
 Route::get('/sucursales/{id}', [SucursalController::class, 'show'])->name('sucursal.show');
@@ -48,86 +46,75 @@ Route::get('/sucursales/{id}', [SucursalController::class, 'show'])->name('sucur
 //ZONAS 
 Route::get('/zonas');
 
-//ROL (perfiles)
-//index
-Route::get('/tablas-maestras/rol', function () {
-    return view('tablasMaestras/rol/index');
-})->name('rol.index');
-//crear
-Route::get('/tablas-maestras/rol/crear', [RolController::class, 'create'])->name('rol.create');
-Route::post('/tablas-maestras/rol/crear/insert', [RolController::class, 'store'])->name('rol.insert');
-//modificar
-Route::get('/tablas-maestras/rol/modificar/{id}/edit', [RolController::class, 'edit'])->name('rol.edit');
-Route::put('/tablas-maestras/rol/modificar/{id}', [RolController::class, 'update'])->name('rol.update');
-//eliminar
-Route::delete('/tablas-maestras/rol/eliminar/{id}', [RolController::class, 'destroy'])->name('rol.delete');
 
+// TABLAS MAESTRAS CATALOGO
+Route::get('/tablas-maestras', function () {
+    return view('tablasMaestras/tablasMaestras');
+});
 
+// Página principal del catálogo
+// Route::get('/tablas-maestras', function () {
+//     return view('tablasMaestras/tablasMaestras');
+// })->name('tablas_maestras.index');
 
+// Agrupamos todo lo demás bajo el prefix
+Route::prefix('tablas-maestras')->group(function () {
+    //CATALOGO
+    Route::get('/', fn() => view('tablasMaestras/tablasMaestras'))->name('tablas_maestras.index');
 
+    // ROL
+    Route::get('/rol', fn() => view('tablasMaestras/rol/index'))->name('rol.index');
+    Route::get('/rol/crear', [RolController::class, 'create'])->name('rol.create');
+    Route::post('/rol/crear/insert', [RolController::class, 'store'])->name('rol.insert');
+    Route::get('/rol/modificar/{id}/edit', [RolController::class, 'edit'])->name('rol.edit');
+    Route::put('/rol/modificar/{id}', [RolController::class, 'update'])->name('rol.update');
+    Route::delete('/rol/eliminar/{id}', [RolController::class, 'destroy'])->name('rol.delete');
 
-//DEPORTE 
-//index
-Route::get('/tablas-maestras/deporte', function () {
-    return view('tablasMaestras/deporte/index');
-})->name('deporte.index');
-//crear
-Route::get('/tablas-maestras/deporte/crear',                [DeporteController::class, 'create'])->name('deporte.create');
-Route::post('/tablas-maestras/deporte/crear/insert',        [DeporteController::class, 'store'])->name('deporte.insert');
-//modificar
-Route::get('/tablas-maestras/deporte/modificar/{id}/edit',  [DeporteController::class, 'edit'])->name('deporte.edit');
-Route::put('/tablas-maestras/deporte/modificar/{id}',       [DeporteController::class, 'update'])->name('deporte.update');
-//eliminar
-Route::delete('/tablas-maestras/deporte/eliminar/{id}',     [DeporteController::class, 'destroy'])->name('deporte.delete');
+    // DEPORTE
+    Route::get('/deporte', fn() => view('tablasMaestras/deporte/index'))->name('deporte.index');
+    Route::get('/deporte/crear', [DeporteController::class, 'create'])->name('deporte.create');
+    Route::post('/deporte/crear/insert', [DeporteController::class, 'store'])->name('deporte.insert');
+    Route::get('/deporte/modificar/{id}/edit', [DeporteController::class, 'edit'])->name('deporte.edit');
+    Route::put('/deporte/modificar/{id}', [DeporteController::class, 'update'])->name('deporte.update');
+    Route::delete('/deporte/eliminar/{id}', [DeporteController::class, 'destroy'])->name('deporte.delete');
 
+    // SEXO
+    Route::get('/sexo', fn() => view('tablasMaestras/sexo/index'))->name('sexo.index');
+    Route::get('/sexo/crear', [SexoController::class, 'create'])->name('sexo.create');
+    Route::post('/sexo/crear/insert', [SexoController::class, 'store'])->name('sexo.insert');
+    Route::get('/sexo/modificar/{id}/edit', [SexoController::class, 'edit'])->name('sexo.edit');
+    Route::put('/sexo/modificar/{id}', [SexoController::class, 'update'])->name('sexo.update');
+    Route::delete('/sexo/eliminar/{id}', [SexoController::class, 'destroy'])->name('sexo.delete');
 
-// SEXOS
-Route::get('/tablas-maestras/sexo', function () {
-    return view('tablasMaestras/sexo/index');
-})->name('sexo.index');
-//crear
-Route::get('/tablas-maestras/sexo/crear',                [SexoController::class, 'create'])->name('sexo.create');
-Route::post('/tablas-maestras/sexo/crear/insert',        [SexoController::class, 'store'])->name('sexo.insert');
-//modificar
-Route::get('/tablas-maestras/sexo/modificar/{id}/edit',  [SexoController::class, 'edit'])->name('sexo.edit');
-Route::put('/tablas-maestras/sexo/modificar/{id}',       [SexoController::class, 'update'])->name('sexo.update');
-//eliminar
-Route::delete('/tablas-maestras/sexo/eliminar/{id}',     [SexoController::class, 'destroy'])->name('sexo.delete');
+    // ESTADO ZONA
+    Route::get('/estado-zona', fn() => view('tablasMaestras/estadoZona/index'))->name('estado_zona.index');
+    Route::get('/estado-zona/crear', [EstadoZonaController::class, 'create'])->name('estado_zona.create');
+    Route::post('/estado-zona/crear/insert', [EstadoZonaController::class, 'store'])->name('estado_zona.insert');
+    Route::get('/estado-zona/modificar/{id}/edit', [EstadoZonaController::class, 'edit'])->name('estado_zona.edit');
+    Route::put('/estado-zona/modificar/{id}', [EstadoZonaController::class, 'update'])->name('estado_zona.update');
+    Route::delete('/estado-zona/eliminar/{id}', [EstadoZonaController::class, 'destroy'])->name('estado_zona.delete');
 
+    // SUPERFICIE
+    Route::get('/superficie', fn() => view('tablasMaestras/superficie/index'))->name('superficie.index');
+    Route::get('/superficie/crear', [SuperficieController::class, 'create'])->name('superficie.create');
+    Route::post('/superficie/crear/insert', [SuperficieController::class, 'store'])->name('superficie.insert');
+    Route::get('/superficie/modificar/{id}/edit', [SuperficieController::class, 'edit'])->name('superficie.edit');
+    Route::put('/superficie/modificar/{id}', [SuperficieController::class, 'update'])->name('superficie.update');
+    Route::delete('/superficie/eliminar/{id}', [SuperficieController::class, 'destroy'])->name('superficie.delete');
 
-//ESTADO ZONA
-//index
-Route::get('/tablas-maestras/estado-zona', function () {
-    return view('tablasMaestras/estadoZona/index');
-})->name('estado_zona.index');
-//crear
-Route::get('/tablas-maestras/estado-zona/crear', [EstadoZonaController::class, 'create'])->name('estado_zona.create');
-Route::post('/tablas-maestras/estado-zona/crear/insert', [EstadoZonaController::class, 'store'])->name('estado_zona.insert');
-//modificar
-Route::get('/tablas-maestras/estado-zona/modificar/{id}/edit', [EstadoZonaController::class, 'edit'])->name('estado_zona.edit');
-Route::put('/tablas-maestras/estado-zona/modificar/{id}', [EstadoZonaController::class, 'update'])->name('estado_zona.update');
-//eliminar
-Route::delete('/tablas-maestras/estado-zona/eliminar/{id}', [EstadoZonaController::class, 'destroy'])->name('estado_zona.delete');
+    //TIPO_CONTACTO
+    Route::resource('tipo-contacto', TipoContactoController::class)->names('tipo_contacto')->except(['show']);
 
+    //TIPO_DOCUMENTO
+    Route::resource('tipo-documento', TipoDocumentoController::class)->names('tipo_documento')->except(['show']);
 
-//SUPERFICIE
-//index
-Route::get('/tablas-maestras/superficie', function () {
-    return view('tablasMaestras/superficie/index');
-})->name('superficie.index');
-//crear
-Route::get('/tablas-maestras/superficie/crear', [SuperficieController::class, 'create'])->name('superficie.create');
-Route::post('/tablas-maestras/superficie/crear/insert', [SuperficieController::class, 'store'])->name('superficie.insert');
-//modificar
-Route::get('/tablas-maestras/superficie/modificar/{id}/edit', [SuperficieController::class, 'edit'])->name('superficie.edit');
-Route::put('/tablas-maestras/superficie/modificar/{id}', [SuperficieController::class, 'update'])->name('superficie.update');
-//eliminar
-Route::delete('/tablas-maestras/superficie/eliminar/{id}', [SuperficieController::class, 'destroy'])->name('superficie.delete');
+    //TIPO_ZONA
+    Route::resource('tipo-zona', TipoZonaController::class)->names('tipo_zona')->except(['show']);
 
+    //ESTADO RESERVA
+    Route::resource('estado-reserva', EstadoReservaController::class)->names('estado_reserva')->except(['show']);
 
-
-
-
+});
 
 
 

@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class tipoContacto extends Model
+class TipoContacto extends Model
 {
-    //
+    
+    use SoftDeletes;
     protected $table = 'tipo_contacto';
     protected $fillable = ['descripcion', 'activo'];
 

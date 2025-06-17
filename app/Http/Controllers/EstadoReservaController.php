@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TipoZona;
+use App\Models\EstadoReserva;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class TipoZonaController extends Controller
+class EstadoReservaController extends Controller
 {
-    private $model = TipoZona::class;
-    private $table = "tipo_zona";
+    private $model = estadoReserva::class;
+    private $table = "estado_reserva";
     /**
      * Display a listing of the resource.
      */
@@ -18,10 +18,6 @@ class TipoZonaController extends Controller
         return view("tablasMaestras.{$this->table}.index");
     }
 
-
-    /**
-     * List the register in json format (API).
-     */
     public function indexApi(Request $request)
     {
         //iniciamos el query y filtro
@@ -108,7 +104,7 @@ class TipoZonaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TipoZona $tipoZona)
+    public function show(EstadoReserva $estadoReserva)
     {
         //
     }

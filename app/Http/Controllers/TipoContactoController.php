@@ -13,13 +13,7 @@ class TipoContactoController extends Controller
     //
     public function index(Request $request)
     {
-        $tipoContactos = TipoContacto::all();
-
-        if ($request->wantsJson()) {
-            return response()->json($tipoContactos);
-        } else {
-            return response()->json($tipoContactos);
-        }
+        return view('tablasMaestras.tipo_contacto.index');
     }
 
     public function indexApi(Request $request)
@@ -67,20 +61,13 @@ class TipoContactoController extends Controller
         return response()->json($data, 200);
     }
 
-    public function showApi($id)
+    public function create() 
     {
-        $tipoContacto = TipoContacto::find($id);
-
-        if (!$tipoContacto) {
-            return response()->json(['message' => 'Tipo de contacto no encontrado'], 404);
-        }
-
-        return response()->json($tipoContacto,201);
+        return view("tablasMaestras.{$this->table}.crear");
     }
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'descripcion' => "required|unique:{$this->table},descripcion|string|max:50",
         ],
@@ -100,9 +87,84 @@ class TipoContactoController extends Controller
         ]);
 
         if (!$objeto) {
-            return response()->json(['message' => "Error al crear el registro"], 500);
+            return response()->json(['message' => 'Error al crear el registro'], 500);
         }
 
         return redirect()->route("{$this->table}.index")->with('success', true);
+    }
+
+    public function edit($id) 
+    {
+        $objeto = $this->model::find($id);
+
+        if (!$objeto) {
+            return redirect()->route("{$this->table}.index")->with('error', 'registro no encontrado');
+        }
+
+        $data = [
+            "objeto" => $objeto,
+            "table"  => $this->table,
+        ];
+
+        return view("tablasMaestras.{$this->table}.modificar", $data);
+    }
+
+    public function update(Request $request, $id)
+    {
+        // 1. Validación
+        $validator = Validator::make($request->all(), [
+            'descripcion' => "required|unique:{$this->table},descripcion",
+        ],
+        [
+            'descripcion.required' => 'El campo es obligatorio',
+            'descripcion.unique'   => 'El campo debe ser único',
+        ]);
+
+        if ($validator->fails()) {
+            $data = [
+                "message" => "Error en la validación de los datos",
+                "errors"  => $validator->errors()->all(),
+                "success" => false,
+            ];
+            return redirect()->route("{$this->table}.index")->with($data);
+        }
+
+        // 2. Buscar el registro
+        $objeto = $this->model::find($id);
+
+        if (!$objeto) {
+            $data = [
+                "message" => "Error en la validación de los datos",
+                "success" => false,
+            ];
+            return redirect()->route("{$this->table}.index")->with($data);
+        }
+
+        // 3. Actualizar el campo
+        $objeto->descripcion = $request->descripcion;
+        $objeto->save(); // timestamps se actualizan solos
+
+        // 4. Redirigir con mensaje de éxito
+        return redirect()->route("{$this->table}.index")->with('success', 'registro actualizado correctamente');
+    }
+
+    public function destroy($id)
+    {
+        // 1. Buscar el registro
+        $objeto = $this->model::find($id);
+
+        if (!$objeto) {
+            $data = [
+                "message" => "registro no encontrado",
+                "success" => false,
+            ];
+            return redirect()->route("{$this->table}.index")->with($data);
+        }
+
+        // 2. "Eliminar" el registro (soft delete )
+        $objeto->delete();
+
+        // 3. Redirigir con mensaje de éxito
+        return redirect()->route("{$this->table}.index")->with('success', 'Registro eliminado correctamente');
     }
 }
