@@ -6,6 +6,7 @@
         (object)['titulo' => 'Superficies',             'ruta' => route('superficie.index')],
         (object)['titulo' => 'Sexos',                   'ruta' => route('sexo.index')],
         (object)['titulo' => 'Deportes',                'ruta' => route('deporte.index')],
+        (object)['titulo' => 'Tipos de Deportes',       'ruta' => route('tipo_deporte.index')], 
         (object)['titulo' => 'Estado de Zonas',         'ruta' => route('estado_zona.index')],
         // (object)['titulo' => 'Categoría de Productos',  'ruta' => null], // null si todavía no tiene ruta
         (object)['titulo' => 'Tipos de Contactos',      'ruta' => route('tipo_contacto.index')], 

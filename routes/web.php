@@ -15,6 +15,7 @@ use App\Http\Controllers\TipoContactoController;
 use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\TipoZonaController;
 use App\Http\Controllers\EstadoReservaController;
+use App\Http\Controllers\TipoDeporteController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -113,6 +114,8 @@ Route::prefix('tablas-maestras')->group(function () {
 
     //ESTADO RESERVA
     Route::resource('estado-reserva', EstadoReservaController::class)->names('estado_reserva')->except(['show']);
+
+    Route::resource('tipo-deporte', TipoDeporteController::class)->names('tipo_deporte')->except(['show']);
 
 });
 

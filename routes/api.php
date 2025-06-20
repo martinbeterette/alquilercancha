@@ -14,7 +14,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\DeporteController;
 use App\Http\Controllers\SexoController;
 use App\Http\Controllers\SuperficieController;
-
+use App\Http\Controllers\TipoDeporteController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -44,6 +44,8 @@ Route::post('usuarios',             [UsuarioController::class, 'store']);
 Route::get('deportes',              [DeporteController::class, 'indexApi']);
 Route::get('deportes+trash',        [DeporteController::class, 'index']);
 Route::post('deportes',             [DeporteController::class, 'store']);
+
+Route::get('tipo-deporte',          [TipoDeporteController::class, 'indexApi']);
 
 Route::get('sexos',                 [SexoController::class, 'indexApi']);
 Route::post('sexos',                [SexoController::class, 'store']);
