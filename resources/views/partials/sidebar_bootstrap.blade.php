@@ -17,7 +17,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="/sucursales" class="nav-link text-white">
+            <a href="/sucursal" class="nav-link text-white">
                 <i class="fas fa-calendar-alt me-2"></i> Sucursales
             </a>
         </li>

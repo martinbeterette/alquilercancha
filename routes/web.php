@@ -16,6 +16,7 @@ use App\Http\Controllers\TipoDocumentoController;
 use App\Http\Controllers\TipoZonaController;
 use App\Http\Controllers\EstadoReservaController;
 use App\Http\Controllers\TipoDeporteController;
+use App\Http\Controllers\ZonaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -41,24 +42,11 @@ Route::post('/registrar-usuario', [AuthController::class, 'recibirFormularioRegi
 Route::get('/home', [HomeController::class, 'home']);
 
 // SUCURSALES
-Route::get('/sucursales', [SucursalController::class, 'index'])->name('sucursal.index');
-Route::get('/sucursales/{id}', [SucursalController::class, 'show'])->name('sucursal.show');
+Route::resource('/sucursal', SucursalController::class)->names('sucursal');
 
 //ZONAS 
-Route::get('/zonas');
+Route::resource('/zona', ZonaController::class)->names('zona');
 
-
-// TABLAS MAESTRAS CATALOGO
-Route::get('/tablas-maestras', function () {
-    return view('tablasMaestras/tablasMaestras');
-});
-
-// Página principal del catálogo
-// Route::get('/tablas-maestras', function () {
-//     return view('tablasMaestras/tablasMaestras');
-// })->name('tablas_maestras.index');
-
-// Agrupamos todo lo demás bajo el prefix
 Route::prefix('tablas-maestras')->group(function () {
     //CATALOGO
     Route::get('/', fn() => view('tablasMaestras/tablasMaestras'))->name('tablas_maestras.index');
@@ -115,6 +103,7 @@ Route::prefix('tablas-maestras')->group(function () {
     //ESTADO RESERVA
     Route::resource('estado-reserva', EstadoReservaController::class)->names('estado_reserva')->except(['show']);
 
+    //TIPO DEPORTE
     Route::resource('tipo-deporte', TipoDeporteController::class)->names('tipo_deporte')->except(['show']);
 
 });

@@ -97,6 +97,18 @@
                     <!-- Register button -->
                     <a href="{{url('formulario-registro')}}" class="btn btn-secondary btn-lg btn-block mt-3">Register</a>
 
+                    <div class="divider d-flex align-items-center my-4">
+                        <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+                    </div>
+
+                    <a data-mdb-ripple-init class="btn btn-primary btn-lg btn-block" style="background-color: #3b5998" href="#!"
+                        role="button">
+                        <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
+                    </a>
+                    <a data-mdb-ripple-init class="btn btn-primary btn-lg btn-block" style="background-color: #55acee" href="#!"
+                        role="button">
+                        <i class="fab fa-twitter me-2"></i>Continue with Twitter</a>
+
                 </form>
             </div>
             </div>
