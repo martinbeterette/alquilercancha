@@ -16,7 +16,7 @@
             'key' => 'rela_deporte',
             'label' => 'Deporte',
             'tipo' => 'select',
-            'options' => $deportes,
+            'options' => $deporte,
             'option_value' => 'id',
             'option_label' => 'descripcion'
         ],
@@ -51,7 +51,7 @@
             'tipo' => 'select',
             'options' => $sucursal,
             'option_value' => 'id',
-            'option_label' => 'descripcion'
+            'option_label' => 'nombre'
         ],
     ];
 @endphp
@@ -60,6 +60,9 @@
 
 @section('content')
 <div class="container mt-4">
+    <a href="{{ route('sucursal.show', ['sucursal' => $id_sucursal]) }}" class="btn btn-outline-secondary mb-4">
+        ← Volver
+    </a>
     <h2 class="mb-4">Crear {{ ucfirst($entidadSing) }}</h2>
     
     <form action="{{ $rutaInsert }}" method="POST">

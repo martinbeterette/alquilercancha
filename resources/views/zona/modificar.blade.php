@@ -16,7 +16,7 @@
             'key' => 'rela_deporte',
             'label' => 'Deporte',
             'tipo' => 'select',
-            'options' => $deportes,
+            'options' => $deporte,
             'option_value' => 'id',
             'option_label' => 'descripcion'
         ],
@@ -51,7 +51,7 @@
             'tipo' => 'select',
             'options' => $sucursal,
             'option_value' => 'id',
-            'option_label' => 'descripcion'
+            'option_label' => 'nombre'
         ],
     ];
 @endphp
