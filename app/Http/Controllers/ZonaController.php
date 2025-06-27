@@ -8,8 +8,10 @@ use App\Models\TipoDeporte;
 use App\Models\Superficie;
 use App\Models\EstadoZona;
 use App\Models\Sucursal;
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
 
 
 // REVISAR TODOS LOS METODOS!!!
@@ -17,7 +19,14 @@ class ZonaController extends Controller
 {
     private $table = "zona";
     private $model = Zona::class;
-    private $campos = [];
+    private $campos = [
+        'descripcion',
+        'dimension',
+        'rela_tipo_deporte',
+        'rela_superficie',
+        'rela_estado_zona',
+        'rela_sucursal',
+    ];
 
     /**
      * Display a listing of the resource.
@@ -73,10 +82,13 @@ class ZonaController extends Controller
             }
         }
 
+        //le asignamos el tipo de zona = cancha
+        $objeto->rela_tipo_zona = 1; // 1 = cancha
+
         // 3. Guardar
         $objeto->save();
 
-        return redirect()->route("{$this->table}.index")->with('success', true);
+        return redirect()->route("sucursal.index")->with('success', true);
     }
 
 
@@ -170,21 +182,26 @@ class ZonaController extends Controller
         }
 
         // 2. Buscar el registro
+        
+                /* 
+                    if (!$objeto) {
+                        $data = [
+                            "message" => "Error en la validación de los datos",
+                            "success" => false,
+                        ];
+                        return redirect()->route("{$this->table}.index")->with($data);
+                    } 
+                */
         $objeto = $this->model::find($id);
-
-        if (!$objeto) {
-            $data = [
-                "message" => "Error en la validación de los datos",
-                "success" => false,
-            ];
-            return redirect()->route("{$this->table}.index")->with($data);
-        }
 
         foreach ($this->campos as $campo) {
             if ($request->has($campo)) {
                 $objeto->$campo = $request->$campo;
             }
         }
+
+        //le asignamos el tipo de zona = cancha
+        $objeto->rela_tipo_zona = 1; // 1 = cancha
 
         // 3. Actualizar el campo
         $objeto->save(); // timestamps se actualizan solos
@@ -216,17 +233,22 @@ class ZonaController extends Controller
         return redirect()->route("{$this->table}.index")->with('success', 'Registro eliminado correctamente');
     }
 
-    private function validateRequest(Request $request): void
+    private function validateRequest(Request $request, ?int $id = null)
     {
-        $validator = Validator::make($request->all(), [
-            'descripcion'         => "required|unique:{$this->table},descripcion",
+        $rules = [
+            'descripcion'         => [
+                'required',
+                Rule::unique($this->table, 'descripcion')->ignore($id),
+            ],
             'dimension'           => 'required|string',
             'rela_deporte'        => 'required|integer|exists:deporte,id',
             'rela_tipo_deporte'   => 'required|integer|exists:tipo_deporte,id',
             'rela_superficie'     => 'required|integer|exists:superficie,id',
             'rela_estado_zona'    => 'required|integer|exists:estado_zona,id',
             'rela_sucursal'       => 'required|integer|exists:sucursal,id',
-        ], [
+        ];
+
+        $messages = [
             'descripcion.required'         => 'La descripción es obligatoria.',
             'descripcion.unique'           => 'Ya existe una zona con esa descripción.',
 
@@ -252,10 +274,11 @@ class ZonaController extends Controller
             'rela_sucursal.required'       => 'Debés seleccionar una sucursal.',
             'rela_sucursal.integer'        => 'La sucursal no es válida.',
             'rela_sucursal.exists'         => 'La sucursal no existe.',
-        ]);
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
-            // Tiramos un HTTP 400 con los errores como array
             response()->json($validator->errors()->all(), 400)->throwResponse();
         }
     }
