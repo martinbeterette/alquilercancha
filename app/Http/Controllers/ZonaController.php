@@ -88,7 +88,7 @@ class ZonaController extends Controller
         // 3. Guardar
         $objeto->save();
 
-        return redirect()->route("sucursal.index")->with('success', true);
+        return redirect()->route("sucursal.show", ['sucursal' => $objeto->rela_sucursal])->with('success', true);
     }
 
 
@@ -159,40 +159,21 @@ class ZonaController extends Controller
     public function update(Request $request, $id)
     {
         // 1. Validación
-        $validator = Validator::make($request->all(), [
-            'descripcion'    => "required|unique:{$this->table},descripcion,{$id}",
-            'rela_deporte'   => "required|integer|exists:deporte,id",
-        ],
-        [
-            'descripcion.required'   => 'La descripción es obligatoria.',
-            'descripcion.unique'     => 'Ya existe un registro con esa descripción.',
-
-            'rela_deporte.required'  => 'Debés seleccionar un deporte.',
-            'rela_deporte.integer'   => 'El valor seleccionado no es válido.',
-            'rela_deporte.exists'    => 'El deporte seleccionado no existe en la base de datos.',
-        ]);
-
-        if ($validator->fails()) {
-            $data = [
-                "message" => "Error en la validación de los datos",
-                "errors"  => $validator->errors()->all(),
-                "success" => false,
-            ];
-            return redirect()->route("{$this->table}.index")->with($data);
-        }
+        
 
         // 2. Buscar el registro
-        
-                /* 
-                    if (!$objeto) {
-                        $data = [
-                            "message" => "Error en la validación de los datos",
-                            "success" => false,
-                        ];
-                        return redirect()->route("{$this->table}.index")->with($data);
-                    } 
-                */
+        $error = $this->validateRequest($request, $id);
+        if ($error) return $error;
+    
         $objeto = $this->model::find($id);
+
+        if (!$objeto) {
+            $data = [
+                "message" => "No se pudo encontrar el registro",
+                "success" => false,
+            ];
+            return redirect()->route("errors.review")->with($data);
+        }
 
         foreach ($this->campos as $campo) {
             if ($request->has($campo)) {
@@ -207,7 +188,7 @@ class ZonaController extends Controller
         $objeto->save(); // timestamps se actualizan solos
 
         // 4. Redirigir con mensaje de éxito
-        return redirect()->route("{$this->table}.index")->with('success', 'registro actualizado correctamente');
+        return redirect()->route("sucursal.show", ["sucursal" => $objeto->rela_sucursal])->with('success', 'registro actualizado correctamente');
     }
 
     /**
@@ -225,12 +206,13 @@ class ZonaController extends Controller
             ];
             return redirect()->route("{$this->table}.index")->with($data);
         }
+        $sucursal = $objeto->rela_sucursal;
 
         // 2. "Eliminar" el registro (soft delete )
         $objeto->delete();
 
         // 3. Redirigir con mensaje de éxito
-        return redirect()->route("{$this->table}.index")->with('success', 'Registro eliminado correctamente');
+        return redirect()->route("sucursal.show", ['sucursal' => $sucursal])->with('success', 'Registro eliminado correctamente');
     }
 
     private function validateRequest(Request $request, ?int $id = null)
@@ -279,7 +261,13 @@ class ZonaController extends Controller
         $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
-            response()->json($validator->errors()->all(), 400)->throwResponse();
+            return view("errors.review", [
+                "message" => "Error durante la validacion de los datos",
+                "errors" => $validator->errors()->all(),
+                "success" => false,
+            ]);
         }
+
+        return null;
     }
 }
