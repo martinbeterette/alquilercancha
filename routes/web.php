@@ -17,6 +17,7 @@ use App\Http\Controllers\TipoZonaController;
 use App\Http\Controllers\EstadoReservaController;
 use App\Http\Controllers\TipoDeporteController;
 use App\Http\Controllers\ZonaController;
+use App\Http\Controllers\ProvinciaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -105,6 +106,9 @@ Route::prefix('tablas-maestras')->group(function () {
 
     //TIPO DEPORTE
     Route::resource('tipo-deporte', TipoDeporteController::class)->names('tipo_deporte')->except(['show']);
+
+    //PROVINCIA
+    Route::resource('provincia', ProvinciaController::class)->names('provincia')->except(['show'])->parameters(['provincia' => 'provincia']);
 
 });
 

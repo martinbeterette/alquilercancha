@@ -164,9 +164,9 @@ function getNestedValue(obj, path) {
   return path.split('.').reduce((acc, part) => acc && acc[part], obj) ?? '';
 }
 
-const contenido = campos.map(campo => {
+/*const contenido = campos.map(campo => {
   let valor = getNestedValue(row, campo.key);
   if (campo.formatter) valor = campo.formatter(valor);
   return `<td>${valor}</td>`;
-}).join('');
+}).join('');*/
 

@@ -4,24 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Provincia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ProvinciaController extends Controller
 {
-    private $model = Provincia::class;
-    private $table = 'provincia';
-    private $campos = [];
+    private $model  = Provincia::class;
+    private $table  = 'provincia';
+    private $route  = "tablasMaestras.provincia";
+    private $campos = ['descripcion'];
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view("{$this->route}.index");
     }
 
     /**
      * Display a listing of the resource in JSON format.
      */
-    public function indexApi()
+    public function indexApi(Request $request)
     {
         //iniciamos el query y filtro
         $query  = $this->model::query();
@@ -71,7 +74,8 @@ class ProvinciaController extends Controller
      */
     public function create() 
     {
-        return view("{$this->table}.crear");
+        
+        return view("{$this->route}.crear");
     }
 
     /**
@@ -79,7 +83,23 @@ class ProvinciaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // 1. Validación
+        $error = $this->validateRequest($request);
+        if ($error) return $error;
+
+        // 2. Crear y asignar campos
+        $objeto = new $this->model;
+
+        foreach ($this->campos as $campo) {
+            if ($request->has($campo)) {
+                $objeto->$campo = $request->$campo;
+            }
+        }
+
+        // 3. Guardar
+        $objeto->save();
+
+        return redirect()->route("{$this->table}.index")->with('success', true);
     }
 
     /**
@@ -93,24 +113,104 @@ class ProvinciaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Provincia $provincia)
+    public function edit($id) 
     {
-        //
+        $objeto = $this->model::find($id);
+
+        if (!$objeto) {
+            return redirect()->route("{$this->table}.index")->with('error', 'registro no encontrado');
+        }
+
+        $data = [
+            "objeto"        => $objeto,
+            "table"         => $this->table,
+        ];
+
+
+        return view("{$this->route}.modificar", $data);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Provincia $provincia)
+    public function update(Request $request, $id)
     {
-        //
+        
+        $error = $this->validateRequest($request, $id);
+        if ($error) return $error;
+    
+        $objeto = $this->model::find($id);
+
+        if (!$objeto) {
+            $data = [
+                "message" => "No se pudo encontrar el registro",
+                "success" => false,
+            ];
+            return redirect()->route("errors.review")->with($data);
+        }
+
+        foreach ($this->campos as $campo) {
+            if ($request->has($campo)) {
+                $objeto->$campo = $request->$campo;
+            }
+        }
+
+        // 3. Actualizar el campo
+        $objeto->save(); // timestamps se actualizan solos
+
+        // 4. Redirigir con mensaje de éxito
+        return redirect()->route("{$this->table}.index")->with('success', 'registro actualizado correctamente');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Provincia $provincia)
+    public function destroy($id)
     {
-        //
+        // 1. Buscar el registro
+        $objeto = $this->model::find($id);
+
+        if (!$objeto) {
+            $data = [
+                "message" => "registro no encontrado",
+                "success" => false,
+            ];
+            return redirect()->route("{$this->table}.index")->with($data);
+        }
+
+        // 2. "Eliminar" el registro (soft delete )
+        $objeto->delete();
+
+        // 3. Redirigir con mensaje de éxito
+        return redirect()->route("{$this->table}.index")->with('success', 'Registro eliminado correctamente');
+    }
+
+    private function validateRequest(Request $request, ?int $id = null)
+    {
+        $rules = [
+            'descripcion' => [
+                'required',
+                'max:20',
+                Rule::unique($this->table, 'descripcion')->ignore($id),
+            ],
+        ];
+
+        $messages = [
+            'descripcion.required'         => 'La descripción es obligatoria.',
+            'descripcion.unique'           => 'Ya existe una zona con esa descripción.',
+            'descripcion.max'              => 'La descripcion es demaciado larga.',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return view("errors.review", [
+                "message" => "Error durante la validacion de los datos",
+                "errors" => $validator->errors()->all(),
+                "success" => false,
+            ]);
+        }
+
+        return null;
     }
 }

@@ -13,6 +13,7 @@
         (object)['titulo' => 'Tipos de Documentos',     'ruta' => route('tipo_documento.index')], 
         (object)['titulo' => 'Tipos de Zonas',          'ruta' => route('tipo_zona.index')], 
         (object)['titulo' => 'Estados de la Reserva',   'ruta' => route('estado_reserva.index')], 
+        (object)['titulo' => 'Provincias',              'ruta' => route('provincia.index')], 
     ];
 @endphp
 

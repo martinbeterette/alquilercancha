@@ -15,5 +15,10 @@ class Provincia extends Model
     public function localidades()
     {
         return $this->hasMany(Localidad::class, 'rela_provincia');
+    } 
+
+    public function getRouteParameterName()
+    {
+        return 'provincia';
     }
 }
