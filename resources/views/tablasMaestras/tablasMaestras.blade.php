@@ -14,6 +14,7 @@
         (object)['titulo' => 'Tipos de Zonas',          'ruta' => route('tipo_zona.index')], 
         (object)['titulo' => 'Estados de la Reserva',   'ruta' => route('estado_reserva.index')], 
         (object)['titulo' => 'Provincias',              'ruta' => route('provincia.index')], 
+        (object)['titulo' => 'Localidades',             'ruta' => route('localidad.index')], 
     ];
 @endphp
 

@@ -16,6 +16,7 @@ use App\Http\Controllers\SexoController;
 use App\Http\Controllers\SuperficieController;
 use App\Http\Controllers\TipoDeporteController;
 use App\Http\Controllers\ProvinciaController;
+use App\Http\Controllers\LocalidadController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -55,8 +56,10 @@ Route::get('superficie',            [SuperficieController::class, 'indexApi']);
 
 Route::get('tipo-zona',             [TipoZonaController::class, 'indexApi']);
 
-Route::get('estado-reserva',             [EstadoReservaController::class, 'indexApi']);
+Route::get('estado-reserva',        [EstadoReservaController::class, 'indexApi']);
 
 Route::get('estado-zona',           [EstadoZonaController::class, 'indexApi']);
 
 Route::get('provincia',             [ProvinciaController::class, 'indexApi']);
+
+Route::get('localidad',             [LocalidadController::class, 'indexApi']);

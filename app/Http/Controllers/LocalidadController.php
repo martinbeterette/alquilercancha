@@ -12,7 +12,7 @@ class LocalidadController extends Controller
 {
     private $model = Localidad::class;
     private $table = 'localidad';
-    private $route = "tablasMaestras.{$this->table}";
+    private $route = "tablasMaestras.localidad";
     private $campos = ['descripcion', 'rela_provincia'];
     /**
      * Display a listing of the resource.
@@ -79,7 +79,7 @@ class LocalidadController extends Controller
     public function create() 
     {
         $data = [
-            "provincia" => Provincia::all(),
+            "provincias" => Provincia::all(),
         ];
         return view("{$this->route}.crear", $data);
     }
@@ -105,7 +105,7 @@ class LocalidadController extends Controller
         // 3. Guardar
         $objeto->save();
 
-        return redirect()->route("{$this->route}.index")->with('success', true);
+        return redirect()->route("{$this->table}.index")->with('success', true);
     }
 
     /**
@@ -194,51 +194,32 @@ class LocalidadController extends Controller
     private function validateRequest(Request $request, ?int $id = null)
     {
         $rules = [
-            'descripcion'         => [
+            'descripcion' => [
                 'required',
-                Rule::unique($this->table, 'descripcion')->ignore($id),
+                Rule::unique($this->table)
+                ->where(function ($query) use ($request) {
+                    return $query->where('descripcion', $request->input('descripcion'))
+                                 ->where('rela_provincia', $request->input('rela_provincia'));
+                })
+                ->ignore($id),
             ],
-            'dimension'           => 'required|string',
-            'rela_deporte'        => 'required|integer|exists:deporte,id',
-            'rela_tipo_deporte'   => 'required|integer|exists:tipo_deporte,id',
-            'rela_superficie'     => 'required|integer|exists:superficie,id',
-            'rela_estado_zona'    => 'required|integer|exists:estado_zona,id',
-            'rela_sucursal'       => 'required|integer|exists:sucursal,id',
+            'rela_provincia' => 'required|integer|exists:provincia,id',
         ];
 
         $messages = [
-            'descripcion.required'         => 'La descripción es obligatoria.',
-            'descripcion.unique'           => 'Ya existe una zona con esa descripción.',
+            'descripcion.required'     => 'La descripción es obligatoria.',
+            'descripcion.unique'       => 'Ya existe una localidad con esa descripción.',
 
-            'dimension.required'           => 'La dimensión es obligatoria.',
-            'dimension.string'             => 'La dimensión debe ser texto.',
-
-            'rela_deporte.required'        => 'Debés seleccionar un deporte.',
-            'rela_deporte.integer'         => 'El deporte no es válido.',
-            'rela_deporte.exists'          => 'El deporte no existe.',
-
-            'rela_tipo_deporte.required'   => 'Debés seleccionar un tipo de deporte.',
-            'rela_tipo_deporte.integer'    => 'El tipo de deporte no es válido.',
-            'rela_tipo_deporte.exists'     => 'El tipo de deporte no existe.',
-
-            'rela_superficie.required'     => 'Debés seleccionar una superficie.',
-            'rela_superficie.integer'      => 'La superficie no es válida.',
-            'rela_superficie.exists'       => 'La superficie no existe.',
-
-            'rela_estado_zona.required'    => 'Debés seleccionar un estado.',
-            'rela_estado_zona.integer'     => 'El estado no es válido.',
-            'rela_estado_zona.exists'      => 'El estado no existe.',
-
-            'rela_sucursal.required'       => 'Debés seleccionar una sucursal.',
-            'rela_sucursal.integer'        => 'La sucursal no es válida.',
-            'rela_sucursal.exists'         => 'La sucursal no existe.',
+            'rela_provincia.required'  => 'Debés seleccionar una provincia.',
+            'rela_provincia.integer'   => 'La provincia no es válida.',
+            'rela_provincia.exists'    => 'La provincia no existe.',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
             return view("errors.review", [
-                "message" => "Error durante la validacion de los datos",
+                "message" => "Error durante la validación de los datos",
                 "errors" => $validator->errors()->all(),
                 "success" => false,
             ]);
@@ -246,4 +227,5 @@ class LocalidadController extends Controller
 
         return null;
     }
+
 }

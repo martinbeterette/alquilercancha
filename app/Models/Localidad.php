@@ -15,4 +15,9 @@ class Localidad extends Model
     {
         return $this->belongsTo(Provincia::class, 'rela_provincia');
     }
+
+    public function barrios()
+    {
+        return $this->hasMany(Barrio::class, 'rela_localidad');
+    }
 }

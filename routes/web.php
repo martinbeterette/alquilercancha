@@ -18,6 +18,7 @@ use App\Http\Controllers\EstadoReservaController;
 use App\Http\Controllers\TipoDeporteController;
 use App\Http\Controllers\ZonaController;
 use App\Http\Controllers\ProvinciaController;
+use App\Http\Controllers\LocalidadController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -109,6 +110,9 @@ Route::prefix('tablas-maestras')->group(function () {
 
     //PROVINCIA
     Route::resource('provincia', ProvinciaController::class)->names('provincia')->except(['show'])->parameters(['provincia' => 'provincia']);
+
+    //LOCALIDAD
+    Route::resource('localidad', LocalidadController::class)->names('localidad')->except(['show'])->parameters(['localidad' => 'localidad']);
 
 });
 
