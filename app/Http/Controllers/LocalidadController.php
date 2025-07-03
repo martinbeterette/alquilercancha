@@ -129,6 +129,7 @@ class LocalidadController extends Controller
 
         $data = [
             "objeto"        => $objeto,
+            "provincias"    => Provincia::all(),
             "table"         => $this->table,
         ];
 
@@ -165,7 +166,7 @@ class LocalidadController extends Controller
         $objeto->save(); // timestamps se actualizan solos
 
         // 4. Redirigir con mensaje de éxito
-        return redirect()->route("{$this->route}.index")->with('success', 'registro actualizado correctamente');
+        return redirect()->route("{$this->table}.index")->with('success', 'registro actualizado correctamente');
     }
 
     /**
@@ -188,7 +189,7 @@ class LocalidadController extends Controller
         $objeto->delete();
 
         // 3. Redirigir con mensaje de éxito
-        return redirect()->route("{$this->route}.index")->with('success', 'Registro eliminado correctamente');
+        return redirect()->route("{$this->table}.index")->with('success', 'Registro eliminado correctamente');
     }
 
     private function validateRequest(Request $request, ?int $id = null)

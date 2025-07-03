@@ -2,21 +2,20 @@
 
 @php
     // VARIABLES CONFIGURABLES
-    $titulo        = "Tipos de Deportes";
-    $table         = "tipo_deporte";
-    $entidadSing   = "Tipo de Deporte"; // para textos
-    $entidadPlural = "Tipos de Deportes";
+    $titulo        = "Localidades";
+    $table         = "localidad";
+    $entidadSing   = "Localidad";
+    $entidadPlural = "Localidades";
     $obj           = $objeto; // el objeto a editar
     $rutaUpdate    = route("$table.update", [$table => $obj->id]);
     $rutaIndex     = route("$table.index");
     $campos = [
-        ['key' => 'descripcion', 'label' => 'Descripción', 'tipo' => 'text'],
-        // ['key' => 'activo', 'label' => 'Activo', 'tipo' => 'checkbox'],
+        ['key' => 'descripcion', 'label' => 'Descripcion', 'tipo' => 'text'],
         [
-            'key' => 'rela_deporte',
-            'label' => 'Deporte',
+            'key' => 'rela_provincia',
+            'label' => 'Provincia',
             'tipo' => 'select',
-            'options' => $deportes,
+            'options' => $provincias,
             'option_value' => 'id',
             'option_label' => 'descripcion'
         ],
