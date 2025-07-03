@@ -17,6 +17,7 @@ use App\Http\Controllers\SuperficieController;
 use App\Http\Controllers\TipoDeporteController;
 use App\Http\Controllers\ProvinciaController;
 use App\Http\Controllers\LocalidadController;
+use App\Http\Controllers\BarrioController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -63,3 +64,5 @@ Route::get('estado-zona',           [EstadoZonaController::class, 'indexApi']);
 Route::get('provincia',             [ProvinciaController::class, 'indexApi']);
 
 Route::get('localidad',             [LocalidadController::class, 'indexApi']);
+
+Route::get('barrio',                [BarrioController::class, 'indexApi']);

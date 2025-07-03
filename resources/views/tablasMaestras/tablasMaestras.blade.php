@@ -15,6 +15,7 @@
         (object)['titulo' => 'Estados de la Reserva',   'ruta' => route('estado_reserva.index')], 
         (object)['titulo' => 'Provincias',              'ruta' => route('provincia.index')], 
         (object)['titulo' => 'Localidades',             'ruta' => route('localidad.index')], 
+        (object)['titulo' => 'Barrios',                 'ruta' => route('barrio.index')],
     ];
 @endphp
 

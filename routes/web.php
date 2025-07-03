@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BarrioController;
 use App\Http\Controllers\EstadoZonaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UsuarioController;
@@ -113,6 +114,8 @@ Route::prefix('tablas-maestras')->group(function () {
 
     //LOCALIDAD
     Route::resource('localidad', LocalidadController::class)->names('localidad')->except(['show'])->parameters(['localidad' => 'localidad']);
+
+    Route::resource('barrio', BarrioController::class)->names('barrio')->except(['show'])->parameters(['barrio' => 'barrio']);
 
 });
 
