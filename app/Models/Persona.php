@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class Persona extends Model
 {
@@ -26,5 +27,12 @@ class Persona extends Model
     public function sexo() 
     {
         return $this->belongsTo(Sexo::class, 'rela_sexo');
+    }
+
+    public static function buscarPersona($contacto)
+    {
+        if (!$contacto) return null;
+
+        return self::where("contacto", "LIKE", "%{$contacto}%")->first();
     }
 }

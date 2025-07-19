@@ -127,4 +127,29 @@ class PersonaController extends Controller
         return response()->json(null, 204);
     }
 
+    public function buscarPersona($contacto)
+    {
+        $persona = Persona::whereHas('contactos', function ($query) use ($contacto) {
+            $query->where('descripcion', 'LIKE', "%{$contacto}%");
+        })
+        ->with('contactos', 'sexo', 'documentos')
+        ->first();
+
+        if(!$persona)
+        {
+            return response()->json([
+                "mensaje" => "No se encontró el registro",
+                "success" => false,
+                "status" => 404
+            ], 404);
+        }
+
+        return response()->json([
+            "mensaje" => "Registro encontrado",
+            "objeto" => $persona,
+            "success" => true,
+            "status" => 200
+        ], 200);
+    }
+
 }

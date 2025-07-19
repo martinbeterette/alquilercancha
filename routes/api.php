@@ -23,6 +23,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::get('/buscar-persona/{contacto}',       [PersonaController::class, 'buscarPersona']);
+
 Route::get('/personas',             [PersonaController::class, 'indexApi']);
 Route::post('/personas',            [PersonaController::class, 'store']);
 Route::get('/personas/{id}',        [PersonaController::class, 'show']);

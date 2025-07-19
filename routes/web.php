@@ -119,15 +119,13 @@ Route::prefix('tablas-maestras')->group(function () {
 
 });
 
-
-
 //mi perfil
 Route::get('/mi-perfil', [UsuarioController::class, 'mostrarMiPerfil'])->name('miPerfil');
 Route::get('/perfil/cambiar-contraseña', fn() => view('auth/cambiarContrasena'))->name('actualizarContrasena');
 Route::post('/perfil/cambiar-contraseña', [UsuarioController::class, 'cambiarContrasena'])->name('cambiarContrasena');
 
 
-
+Route::get('reserva-interna', fn() => view('reserva.interna'))->name('reserva_interna');
 
 
 
@@ -137,14 +135,14 @@ Route::post('/perfil/cambiar-contraseña', [UsuarioController::class, 'cambiarCo
 
 //PROTOTIPO PRIMER INICIO DEL ADMINISTRADOR
 Route::get('/primer-inicio', function() {
-    return view('primerInicio');
+    return view('basura.primerInicio');
 });
 
 // PRUEBA
 Route::get('/sublime-merge', function() {
-    return view("sublimeMerge");
+    return view("basura.sublimeMerge");
 });
 
 Route::get('/prueba', function() {
-    return view("probando_funciones");
+    return view("basura.probando_funciones");
 });
