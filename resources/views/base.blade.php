@@ -10,11 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
     <!-- Bootstrap MDB CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet" />
-    <!-- MDB Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb-icons.min.css" rel="stylesheet" />
+    <link href="{{ asset("vendor/css/bootstrap_mdb.min.css") }}" rel="stylesheet" />
     {{-- font awesome --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset("vendor/fontawesome/css/all.min.css") }}">
     {{-- Aquí irían los CSS y JS particulares de la página --}}
     @yield('extra_stylesheets')
 </head>
@@ -44,14 +42,14 @@
 
 
     <!-- Bootstrap MDB JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- VUE -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.5.13/vue.global.min.js"></script>
+    <script src="{{ asset("vendor/libs/bootstrap_mdb_ui_kit.min.js") }}"></script>
+    <script src="{{ asset("vendor/libs/bootstrap_popper.min.js") }}"></script>
+    <script src="{{ asset("vendor/libs/jquery.min.js") }}"></script>
     <!-- AXIOS -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="{{ asset("vendor/libs/axios.min.js") }}"></script>
 
+    <!-- VUE -->
+    <script src="{{ asset("vendor/libs/vue.min.js") }}"></script>
     {{-- Aquí irían los JS particulares de la página --}}
     @yield('extra_js')
 </body>
