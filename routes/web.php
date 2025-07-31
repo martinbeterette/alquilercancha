@@ -21,9 +21,8 @@ use App\Http\Controllers\ZonaController;
 use App\Http\Controllers\ProvinciaController;
 use App\Http\Controllers\LocalidadController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'home']);
+
 
 /*Route::prefix('/personas')->group(function () {
     

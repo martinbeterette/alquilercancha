@@ -130,7 +130,7 @@ class PersonaController extends Controller
     public function buscarPersona($contacto)
     {
         $persona = Persona::whereHas('contactos', function ($query) use ($contacto) {
-            $query->where('descripcion', 'LIKE', "%{$contacto}%");
+            $query->where('descripcion', 'LIKE', "{$contacto}");
         })
         ->with('contactos', 'sexo', 'documentos')
         ->first();
