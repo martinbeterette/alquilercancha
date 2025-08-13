@@ -20,6 +20,9 @@
                         <input type="text" id="contacto" name="contacto" class="form-control" placeholder="Ej: juan@mail.com">
                     </div>
                 </div>
+                <button type="submit" id="btn-buscar" class="btn btn-primary">
+                    Buscar
+                </button>
                 {{-- Acá después podés poner el botón o más campos si hace falta --}}
             </form>
         </div>
@@ -34,8 +37,9 @@
 @section('extra_js')
 <script>
     $(document).ready(function () {
-        $('#contacto').on('input', function () {
-            let contacto = $(this).val();
+        $('#form-buscar-persona').on('submit', function (e) {
+            e.preventDefault();
+            let contacto = $('#contacto').val();
             if (contacto.length < 3) {
                 $('#card-cliente, #form-nuevo-cliente').addClass('d-none');
                 return;
@@ -46,7 +50,8 @@
                     console.log("Respuesta completa:", response);
                     let persona = response.data.objeto;
                     alert(persona);
-                    $('#nombre-cliente').text(persona.nombre);
+                    $('#nombre-cliente').text(persona.nombre ?? 'No definido');
+                    $('#apellido-cliente').text(persona.apellido ?? 'No definido');
                     $('#id-cliente').text(persona.id);
                     $('#card-cliente').removeClass('d-none');
                     $('#form-nuevo-cliente').addClass('d-none');
@@ -59,6 +64,11 @@
                         console.error("Error inesperado:", error);
                     }
                 });
+        });
+
+        $('#btn-crear-cliente-nuevo').on('click', function () {
+            $('#card-cliente').addClass('d-none');
+            $('#form-nuevo-cliente').removeClass('d-none');
         });
     });
 </script>

@@ -3,7 +3,7 @@
         Crear cliente nuevo
     </div>
     <div class="card-body">
-        <form action="{{ route('reserva_interna.create') }}" method="POST" id="crear-reservante">
+        <form action="{{ /*route('reserva_interna.create')*/ url('/url/de/prueba') }}" method="POST" id="crear-reservante">
             @csrf
             <div class="mb-3">
                 <label for="nuevo-nombre" class="form-label" placeholder="Juan Perez">Nombre</label>

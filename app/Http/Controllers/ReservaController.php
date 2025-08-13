@@ -118,5 +118,6 @@ class ReservaController extends Controller
     private function crearReserva(Request $request, $reservante, $cancha) : ?Reserva
     {
         //falta hacer la logica
+        return null; // o devolver la reserva creada
     }
 }
