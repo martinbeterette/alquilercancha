@@ -7,6 +7,15 @@
 @endsection
 
 @section('content')
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <div class="container mt-4">
     <div class="card">
         <div class="card-header bg-primary text-white">
@@ -70,6 +79,9 @@
             $('#card-cliente').addClass('d-none');
             $('#form-nuevo-cliente').removeClass('d-none');
         });
-    });
+        @if ($errors->any())
+            $('#form-nuevo-cliente').removeClass('d-none');
+        @endif
+    }); //document ready
 </script>
 @endsection

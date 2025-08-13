@@ -20,6 +20,7 @@ use App\Http\Controllers\TipoDeporteController;
 use App\Http\Controllers\ZonaController;
 use App\Http\Controllers\ProvinciaController;
 use App\Http\Controllers\LocalidadController;
+use App\Http\Controllers\ReservaController;
 
 Route::get('/', [HomeController::class, 'home']);
 
@@ -125,6 +126,19 @@ Route::post('/perfil/cambiar-contraseña', [UsuarioController::class, 'cambiarCo
 
 
 Route::get('reserva-interna', fn() => view('reserva.interna'))->name('reserva_interna');
+Route::post('crear-cliente-nuevo', [ReservaController::class, 'crearClienteNuevo'])->name('cliente_nuevo.create');
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

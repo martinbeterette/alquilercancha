@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CrearClienteRequest;
 use App\Models\Persona;
 use App\Models\Reserva;
 use Illuminate\Http\Request;
@@ -83,6 +84,11 @@ class ReservaController extends Controller
     public function destroy(Reserva $reserva)
     {
         //
+    }
+
+    public function crearClienteNuevo(CrearClienteRequest $request)
+    {
+        return "hola mundo";
     }
 
     /**
