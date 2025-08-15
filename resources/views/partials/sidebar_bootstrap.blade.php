@@ -61,7 +61,7 @@
                 <hr class="dropdown-divider">
             </li>
             <li>
-                <a class="dropdown-item text-danger" href="{{ route('logout') }}">
+                <a class="dropdown-item text-danger" href="{{ route('logout.casero') }}">
                     <i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión
                 </a>
             </li>

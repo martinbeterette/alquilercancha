@@ -3,7 +3,7 @@
 <head>
     @if (!session('usuario'))
         <script>
-            window.location.href = "{{ url('/login') }}";
+            window.location.href = "{{ url('/login-casero') }}";
         </script>
     @endif
     <meta charset="UTF-8">

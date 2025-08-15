@@ -156,7 +156,7 @@ class UsuarioController extends Controller
             'fecha_nacimiento' => $persona?->fecha_nacimiento ?? $mensaje,
         ];
         // return response()->json($data);
-        return view('auth.miPerfil', $data);
+        return view('auth_casero.miPerfil', $data);
     }
 
     public function cambiarContrasena(Request $request) {
@@ -195,7 +195,7 @@ class UsuarioController extends Controller
 
         session()->flush();
         
-        return redirect('/login')->with([
+        return redirect('/login-casero')->with([
             "success" => true,
             "message" => "Contraseña actualizada correctamente",
         ], 200);

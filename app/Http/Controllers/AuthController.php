@@ -17,12 +17,12 @@ class AuthController extends Controller
     //
     public function showLoginForm()
     {
-        return view('auth/login');
+        return view('auth_casero/login_casero');
     }
 
     public function showRegisterForm()
     {
-        return view('auth/register');
+        return view('auth_casero/register_casero');
     }
 
     
@@ -58,7 +58,7 @@ class AuthController extends Controller
 
             //si todo sale bien, redirigimos al login
             return $this->redirectResponse(
-                '/login', 
+                '/login-casero', 
                 true, 
                 'Usuario creado correctamente'
             );
@@ -101,7 +101,7 @@ class AuthController extends Controller
             ];
 
             // return response()->json($data, 400);
-            return redirect()->route('login')->with($data);
+            return redirect()->route('login.casero')->with($data);
         }
     
         // Verificar si el usuario existe y la contraseña es correcta
@@ -115,7 +115,7 @@ class AuthController extends Controller
             ];
 
             // return response()->view('auth/credencialesIncorrectas', compact('data'), 401);
-            return redirect()->route('login')->with($data);
+            return redirect()->route('login.casero')->with($data);
         }
     
         //iniciar la sesion
@@ -128,7 +128,7 @@ class AuthController extends Controller
     public function logout()
     {
         session()->flush();
-        return $this->redirectResponse('/login', true, "Sesion cerrada exitosamente");
+        return $this->redirectResponse('/login-casero', true, "Sesion cerrada exitosamente");
     }
 
     private function authenticate(Request $request) {
