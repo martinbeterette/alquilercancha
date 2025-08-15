@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Rol;
+use Spatie\Permission\Models\Role;
+// use Spatie\Permission\Models\Permission;
 
 class RolSeeder extends Seeder
 {
@@ -27,6 +29,16 @@ class RolSeeder extends Seeder
         Rol::create([
             'descripcion' => 'Empleado',
             'activo' => true,
+        ]);
+
+        Role::create([
+            'name' => 'admin',
+            'guard_name' => 'web',
+        ]);
+        
+        Role::create([
+            'name' => 'loquito',
+            'guard_name' => 'web',
         ]);
     }
 }
