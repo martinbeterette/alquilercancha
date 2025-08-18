@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CrearClienteRequest;
+use App\Models\Contacto;
 use App\Models\Persona;
 use App\Models\Reserva;
 use Illuminate\Http\Request;
@@ -88,7 +89,16 @@ class ReservaController extends Controller
 
     public function crearClienteNuevo(CrearClienteRequest $request)
     {
-        return "hola mundo";
+        // nombre:martin
+        // contacto: martin@example
+        // tipo_contacto: 1
+
+        $persona = Persona::create(["nombre" => $request->nombre]);
+        $contacto = $persona->contactos()->create(["descripcion" => $request->contacto, "rela_tipo_contacto" => $request->tipo_contacto]);
+
+        $contacto->delete();
+        $persona->delete();
+        return response()->json(["persona" => $persona, "contacto" => $contacto]);
     }
 
     /**
@@ -107,7 +117,7 @@ class ReservaController extends Controller
         $persona->contactos()->create([
             'descripcion' => $request->input('contacto'),
             // 'rela_tipo_contacto' => 1, // email
-            'rela_tipo_contacto' => $request->input('tipo-contacto'), // Email o telefono
+            'rela_tipo_contacto' => $request->input('tipo_contacto'), // Email o telefono
         ]);
 
         // $persona->documentos()->create([

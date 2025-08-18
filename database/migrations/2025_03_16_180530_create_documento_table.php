@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('descripcion');
             $table->foreignId('rela_persona')->constrained('persona')->onDelete('restrict');
             $table->foreignId('rela_tipo_documento')->constrained('tipo_documento')->onDelete('restrict');
-            $table->boolean('activo')->default(true);
+            $table->boolean('activo')->default(true);//estoy migrando al softdeletes
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

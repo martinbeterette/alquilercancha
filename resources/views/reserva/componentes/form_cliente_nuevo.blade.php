@@ -11,7 +11,7 @@
                 <label for="contacto" class="form-label" placeholder="correo@example.com">Contacto</label>
                 <input type="text" name="contacto" id="contacto" class="form-control" value="{{ old('contacto') }}">
                 {{-- futuramente hay que agregar un select de tipo contacto --}}
-                <input type="hidden" name="tipo-contacto" value="1">
+                <input type="hidden" name="tipo_contacto" value="1">
             </div>
             {{-- Otros campos --}}
             <div>

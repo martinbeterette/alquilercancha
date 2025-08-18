@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('nombre')->nullable();
             $table->string('apellido')->nullable();
             $table->date('fecha_nacimiento')->nullable();
-            $table->unsignedBigInteger('rela_sexo')->nullable();
-            $table->foreign('rela_sexo')->references('id')->on('sexo')->onDelete('restrict');
+            $table->foreignId('rela_sexo')->nullable()->constrained('sexo')->nullOnDelete();
             $table->boolean('activo')->default(true)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
