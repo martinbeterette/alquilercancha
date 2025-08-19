@@ -270,4 +270,20 @@ class ZonaController extends Controller
 
         return null;
     }
+
+    /**
+     *Obtener canchas por sucursal
+     *@param Sucursal $sucursal la sucursal con la que filtramos
+     *@return \Illuminate\Http\JsonResponse array de canchas por sucursal
+     */  
+    public function canchasPorSucursal(Sucursal $sucursal)
+    {
+        $canchas = $sucursal->zonas()->where('rela_tipo_zona',1)->get();
+        return response()->json([
+            "message" => "Canchas de la sucursal $sucursal->id",
+            "canchas" => $canchas,
+            "success" => true,
+            "status" => 200,
+        ], 200);
+    }
 }

@@ -18,6 +18,7 @@ use App\Http\Controllers\TipoDeporteController;
 use App\Http\Controllers\ProvinciaController;
 use App\Http\Controllers\LocalidadController;
 use App\Http\Controllers\BarrioController;
+use App\Http\Controllers\ZonaController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -68,3 +69,5 @@ Route::get('provincia',             [ProvinciaController::class, 'indexApi']);
 Route::get('localidad',             [LocalidadController::class, 'indexApi']);
 
 Route::get('barrio',                [BarrioController::class, 'indexApi']);
+
+Route::get('sucursal/{sucursal}/cancha', [ZonaController::class, 'canchasPorSucursal']);

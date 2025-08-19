@@ -141,12 +141,9 @@ class ReservaController extends Controller
 
     public function seleccionarHoraYCancha(Persona $persona)
     {
-        $sucursales = Sucursal::pluck('descripcion', 'id');
-        $canchas = Zona::where('rela_tipo_zona', 1)->get();
-        return view('vista.a.hacer', [
-            "sucursales" => $sucursales,
-            "canchas" => $canchas,
-            
+        $sucursales = Sucursal::pluck('nombre', 'id');
+        return view('reserva.seleccionar_cancha', [
+            "sucursales" => $sucursales,            
         ]);
     }
 }
