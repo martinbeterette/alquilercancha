@@ -129,6 +129,7 @@ Route::post('/perfil/cambiar-contraseña', [UsuarioController::class, 'cambiarCo
 
 Route::get('reserva-interna', fn() => view('reserva.interna'))->name('reserva_interna');
 Route::post('crear-cliente-nuevo', [ReservaController::class, 'crearClienteNuevo'])->name('cliente_nuevo.create');
+Route::get('reserva-interna/{persona}', [ReservaController::class, 'seleccionarHoraYCancha'])->name('seleccionar.hora.y.cancha');
 
 
 

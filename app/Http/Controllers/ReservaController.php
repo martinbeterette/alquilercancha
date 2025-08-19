@@ -6,6 +6,8 @@ use App\Http\Requests\CrearClienteRequest;
 use App\Models\Contacto;
 use App\Models\Persona;
 use App\Models\Reserva;
+use App\Models\Sucursal;
+use App\Models\Zona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -96,9 +98,9 @@ class ReservaController extends Controller
         $persona = Persona::create(["nombre" => $request->nombre]);
         $contacto = $persona->contactos()->create(["descripcion" => $request->contacto, "rela_tipo_contacto" => $request->tipo_contacto]);
 
-        $contacto->delete();
-        $persona->delete();
-        return response()->json(["persona" => $persona, "contacto" => $contacto]);
+        // $contacto->delete();
+        // $persona->delete();
+        return redirect()->route('seleccionar.hora.y.cancha', ["persona" => $persona]);
     }
 
     /**
@@ -135,5 +137,16 @@ class ReservaController extends Controller
     {
         //falta hacer la logica
         return null; // o devolver la reserva creada
+    }
+
+    public function seleccionarHoraYCancha(Persona $persona)
+    {
+        $sucursales = Sucursal::pluck('descripcion', 'id');
+        $canchas = Zona::where('rela_tipo_zona', 1)->get();
+        return view('vista.a.hacer', [
+            "sucursales" => $sucursales,
+            "canchas" => $canchas,
+            
+        ]);
     }
 }
