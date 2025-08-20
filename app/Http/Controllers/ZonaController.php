@@ -278,7 +278,12 @@ class ZonaController extends Controller
      */  
     public function canchasPorSucursal(Sucursal $sucursal)
     {
-        $canchas = $sucursal->zonas()->where('rela_tipo_zona',1)->get();
+        $canchas = $sucursal
+            ->zonas()
+            ->where('rela_tipo_zona',1)
+            ->with('tipoZona', 'superficie','tipoDeporte')
+            ->get();
+
         return response()->json([
             "message" => "Canchas de la sucursal $sucursal->id",
             "canchas" => $canchas,

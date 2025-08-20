@@ -22,8 +22,14 @@
 @section('extra_js')
 <script>
     $(document).ready(function() {
-
+        let id_sucursal = $('#sucursal').val();
+        buscarCanchaPorSucursal(id_sucursal);
     }); 
+
+    $('#sucursal').change(function() {
+        let id_sucursal = $(this).val();
+        buscarCanchaPorSucursal(id_sucursal);
+    });
     async function buscarCanchaPorSucursal(id_sucursal) {
         try {
             const response = await axios.get(`/api/sucursal/${id_sucursal}/cancha`);
@@ -49,7 +55,7 @@
                                 <h5 class="card-title">Cancha #${c.id}</h5>
                                 <p class="card-text">
                                     <strong>Nombre:</strong> ${c.nombre ?? 'Sin nombre'} <br>
-                                    <strong>Tipo:</strong> ${c.tipo ?? 'N/A'} <br>
+                                    <strong>Tipo:</strong> ${c.tipo_zona.descripcion ?? 'N/A'} <br>
                                     <strong>Sucursal:</strong> ${c.rela_sucursal}
                                 </p>
                             </div>
