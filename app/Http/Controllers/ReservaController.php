@@ -170,7 +170,7 @@ class ReservaController extends Controller
         $desde = Carbon::parse("{$fecha} {$horaDesde}");
         $hasta = Carbon::parse("{$fecha} {$horaHasta}");
 
-        $existeCruce = Reserva::where('cancha_id', $cancha->id)
+        $existeCruce = Reserva::where('rela_zona', $cancha->id)
             ->whereDate('fecha', $fecha)
             ->where(function($query) use ($desde, $hasta) {
                 $query->whereBetween('hora_desde', [$desde, $hasta])
