@@ -21,6 +21,9 @@
 
 @section('extra_js')
 <script>
+    //pasamos la persona
+    let persona = @json($persona->id ?? null);
+
     $(document).ready(function() {
         let id_sucursal = $('#sucursal').val();
         buscarCanchaPorSucursal(id_sucursal);
@@ -58,6 +61,9 @@
                                     <strong>Tipo:</strong> ${c.tipo_zona.descripcion ?? 'N/A'} <br>
                                     <strong>Sucursal:</strong> ${c.rela_sucursal}
                                 </p>
+                                <button class="btn btn-primary btn-seleccionar-cancha" data-id="${c.id}">
+                                    Seleccionar Cancha
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -69,6 +75,10 @@
             console.error("Error en la petición:", error);
         }
     }
-   
+    $(document).on('click', '.btn-seleccionar-cancha',  function() {
+        alert(persona);
+        let cancha = $(this).data('id');
+        window.location.href = `/reserva-interna/persona/${persona}/cancha/${cancha}/horario`;
+    });
 </script>
 @endsection

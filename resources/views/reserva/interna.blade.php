@@ -58,12 +58,17 @@
                 .then(response => {
                     console.log("Respuesta completa:", response);
                     let persona = response.data.objeto;
-                    alert(persona);
                     $('#nombre-cliente').text(persona.nombre ?? 'No definido');
                     $('#apellido-cliente').text(persona.apellido ?? 'No definido');
                     $('#id-cliente').text(persona.id);
                     $('#card-cliente').removeClass('d-none');
                     $('#form-nuevo-cliente').addClass('d-none');
+
+                    // Agregar el onclick al botón
+                    $('#btn-seleccionar-cliente').off('click') // Primero quitamos clicks previos para evitar duplicados
+                        .on('click', function() {
+                            window.location.href = `reserva-interna/persona/${persona.id}/cancha`;
+                        });
                 })
                 .catch(error => {
                     if (error.response && error.response.status === 404) {

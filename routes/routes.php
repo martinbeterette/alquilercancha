@@ -130,7 +130,8 @@ Route::post('/perfil/cambiar-contraseña', [UsuarioController::class, 'cambiarCo
 Route::get('reserva-interna', fn() => view('reserva.interna'))->name('reserva_interna');
 Route::post('crear-cliente-nuevo', [ReservaController::class, 'crearClienteNuevo'])->name('cliente_nuevo.create');
 Route::get('reserva-interna/persona/{persona}/cancha', [ReservaController::class, 'seleccionarHoraYCancha'])->name('seleccionar.hora.y.cancha');
-
+Route::get('reserva-interna/persona/{persona}/cancha/{cancha}/horario', [ReservaController::class, 'seleccionarHorario'])->name('seleccionar.horario');
+Route::post('reserva-interna/persona/{persona}/cancha/{cancha}/horario', [ReservaController::class, 'store'])->name('crear.reserva');
 
 
 Route::get("probando/{dato3}/{dato2}/{dato1}",fn($dato1,$dato2,$dato3) => "Dato 3: $dato3 <br> Dato 1: $dato1 <br> Dato 2 $dato2");

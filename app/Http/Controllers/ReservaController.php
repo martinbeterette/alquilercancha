@@ -10,6 +10,7 @@ use App\Models\Sucursal;
 use App\Models\Zona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ReservaController extends Controller
 {
@@ -32,29 +33,21 @@ class ReservaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, int $cancha)
+    public function store(Request $request, Persona $persona, Zona $cancha)
     {
-        //buscamos a la persona segun su email o telefono
-        $persona = Persona::whereRelation('contactos', 'descripcion', $request->email)
-            ->with('contactos', 'sexo', 'documentos')
-            ->first();
-
-        //Verificamos si se obtuvo una persona
-        if (!$persona) {
-            //Si es que no se encontro una persona con ese email o telefono
-            DB::transaction(function() use($request, $cancha) {
-                //Creamos a la persona(reservante)
-                $reservante     = $this->crearReservante($request);
-                //creamos la reserva con la persona recien creada
-                $reserva        = $this->crearReserva($request, $reservante, $cancha);
-            });
-        } else {
-            //creamos la reserva con la persona encontrada segun el email o telefono
-            $reservante = $persona;
-            $reserva    = $this->crearReserva($request, $reservante, $cancha);
-            return "lo mismo pero en la orta salida";
-        }
-        return "retornamos alguna vista o redireccion";
+        if (!$this->horarioEstaDisponible(
+            $request->input('fecha'),
+            $request->input('hora_desde'), 
+            $request->input('hora_hasta'), 
+            $cancha
+            )
+        ) {
+                return "esta ocupado";
+                // return back()->withErrors(['El horario seleccionado no está disponible. Por favor, elija otro.']);
+        } 
+        // $reserva    = $this->crearReserva($request, $persona, $cancha);
+        
+        return "esta disponible";
     }
 
     /**
@@ -133,7 +126,7 @@ class ReservaController extends Controller
     /**
      * Creamos la reserva, soporta reserva interna y externa
     */
-    private function crearReserva(Request $request, $reservante, $cancha) : ?Reserva
+    private function crearReserva(Request $request, Persona $persona, Zona $cancha) : ?Reserva
     {
         //falta hacer la logica
         return null; // o devolver la reserva creada
@@ -143,7 +136,52 @@ class ReservaController extends Controller
     {
         $sucursales = Sucursal::pluck('nombre', 'id');
         return view('reserva.seleccionar_cancha', [
-            "sucursales" => $sucursales,            
+            "sucursales" => $sucursales,
+            "persona" => $persona,          
         ]);
+    }
+
+    /**
+     * Pagina para seleccionar la hora a reservar
+     * @todo Refactorizar codigo y elegir nombres apropiados
+     */  
+    public function seleccionarHorario(Persona $persona, Zona $cancha)
+    {
+        // Lógica para seleccionar horario
+        // Aquí deberías implementar la lógica para mostrar los horarios disponibles
+        // según la cancha seleccionada y la persona.
+        return view('reserva.seleccionar_horario', [
+            'persona' => $persona,
+            'cancha' => $cancha->load('superficie', 'tipoDeporte'),
+        ]);
+    }
+
+    /**
+     * Verifica si un horario está disponible para una cancha en una fecha.
+     *
+     * @param string $fecha       Formato 'YYYY-MM-DD'
+     * @param string $horaDesde   Formato 'HH:MM'
+     * @param string $horaHasta   Formato 'HH:MM'
+     * @param Cancha $cancha
+     * @return bool
+     */
+    function horarioEstaDisponible(string $fecha, string $horaDesde, string $horaHasta, Zona $cancha): bool
+    {
+        $desde = Carbon::parse("{$fecha} {$horaDesde}");
+        $hasta = Carbon::parse("{$fecha} {$horaHasta}");
+
+        $existeCruce = Reserva::where('cancha_id', $cancha->id)
+            ->whereDate('fecha', $fecha)
+            ->where(function($query) use ($desde, $hasta) {
+                $query->whereBetween('hora_desde', [$desde, $hasta])
+                    ->orWhereBetween('hora_hasta', [$desde, $hasta])
+                    ->orWhere(function($q) use ($desde, $hasta) {
+                        $q->where('hora_desde', '<=', $desde)
+                            ->where('hora_hasta', '>=', $hasta);
+                    });
+            })
+            ->exists();
+
+        return !$existeCruce;
     }
 }
