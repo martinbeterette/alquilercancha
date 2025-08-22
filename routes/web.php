@@ -7,3 +7,4 @@ require __DIR__.'/routes.php';
 Route::get('solo-loquitos', function () {
     return "Solo Loquitos";
 })->middleware(['auth', 'role:admin']);
+

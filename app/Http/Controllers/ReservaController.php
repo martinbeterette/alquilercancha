@@ -35,19 +35,29 @@ class ReservaController extends Controller
      */
     public function store(Request $request, Persona $persona, Zona $cancha)
     {
+        // Validaciones básicas
+        $request->validate([
+            'fecha'       => 'required|date',
+            'hora_desde'  => 'required|date_format:H:i',
+            'hora_hasta'  => 'required|date_format:H:i|after:hora_desde',
+        ]);
+
+        $horaDesde = Carbon::parse($request->input('hora_desde'))->format('H:i:s');
+        $horaHasta = Carbon::parse($request->input('hora_hasta'))->format('H:i:s');
+
         if (!$this->horarioEstaDisponible(
             $request->input('fecha'),
-            $request->input('hora_desde'), 
-            $request->input('hora_hasta'), 
+            $horaDesde, 
+            $horaHasta, 
             $cancha
             )
         ) {
-                return "esta ocupado";
-                // return back()->withErrors(['El horario seleccionado no está disponible. Por favor, elija otro.']);
+                // return "esta ocupado";
+                return back()->withErrors(['El horario seleccionado no está disponible. Por favor, elija otro.']);
         } 
-        // $reserva    = $this->crearReserva($request, $persona, $cancha);
+        $reserva = $this->crearReserva($request, $persona, $cancha);
         
-        return "esta disponible";
+        return "Reserva Creada exitosamente, Reserva ID: {$reserva->id}";
     }
 
     /**
@@ -128,8 +138,20 @@ class ReservaController extends Controller
     */
     private function crearReserva(Request $request, Persona $persona, Zona $cancha) : ?Reserva
     {
-        //falta hacer la logica
-        return null; // o devolver la reserva creada
+        return Reserva::create([
+            'observacion'        => $request->input('observacion', null),
+            'fecha'              => $request->input('fecha'),
+            'hora_desde'         => $request->input('hora_desde')->format('H:i:s'),
+            'hora_hasta'         => $request->input('hora_hasta')->format('H:i:s'),
+            'precio'             => null, // lo vas a calcular con tarifas más adelante
+            'estado'             => 'Pendiente',
+            'metodo_pago'        => 'Pendiente',
+            'tipo_reserva'       => 'Interna',
+            'cancelacion_motivo' => null,
+            'creado_por'         => null, // metodo auth para insertar el id
+            'rela_persona'       => $persona->id,
+            'rela_zona'          => $cancha->id,
+        ]);
     }
 
     public function seleccionarHoraYCancha(Persona $persona)
@@ -165,23 +187,27 @@ class ReservaController extends Controller
      * @param Cancha $cancha
      * @return bool
      */
-    function horarioEstaDisponible(string $fecha, string $horaDesde, string $horaHasta, Zona $cancha): bool
+    private function horarioEstaDisponible(string $fecha, string $horaDesde, string $horaHasta, Zona $cancha): bool
     {
-        $desde = Carbon::parse("{$fecha} {$horaDesde}");
-        $hasta = Carbon::parse("{$fecha} {$horaHasta}");
+        $desde = Carbon::parse("{$fecha} {$horaDesde}")->format('H:i:s');
+        $hasta = Carbon::parse("{$fecha} {$horaHasta}")->format('H:i:s');
 
         $existeCruce = Reserva::where('rela_zona', $cancha->id)
             ->whereDate('fecha', $fecha)
             ->where(function($query) use ($desde, $hasta) {
-                $query->whereBetween('hora_desde', [$desde, $hasta])
-                    ->orWhereBetween('hora_hasta', [$desde, $hasta])
-                    ->orWhere(function($q) use ($desde, $hasta) {
-                        $q->where('hora_desde', '<=', $desde)
-                            ->where('hora_hasta', '>=', $hasta);
-                    });
+                $query->where('hora_desde', '<', $hasta)
+                      ->where('hora_hasta', '>', $desde);
             })
             ->exists();
 
         return !$existeCruce;
+    }
+
+    public function verReservas()
+    {
+        // Traemos todas las reservas con persona y cancha cargadas
+        $reservas = Reserva::with(['persona', 'zona'])->get();
+
+        return view('reserva.ver_reservas', compact('reservas'));
     }
 }

@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             PersonaSeeder::class,
             PreAjustesSeeder::class,
             ComplejoSeeder::class,
+            TestReservaSeeder::class,
         ]);
         User::factory()->create([
             'name' => 'Test User',

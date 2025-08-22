@@ -24,4 +24,11 @@ class Reserva extends Model
         'rela_zona',
     ];
     //
+    public function persona(){
+        return $this->belongsTo(Persona::class, 'rela_persona');
+    }
+
+    public function zona() {
+        return $this->belongsTo(Zona::class, 'rela_zona');
+    }
 }
