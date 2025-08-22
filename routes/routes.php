@@ -21,6 +21,9 @@ use App\Http\Controllers\ZonaController;
 use App\Http\Controllers\ProvinciaController;
 use App\Http\Controllers\LocalidadController;
 use App\Http\Controllers\ReservaController;
+use App\Http\Controllers\PerfilController as RolesController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ModuloController;
 
 
 
@@ -135,26 +138,25 @@ Route::post('reserva-interna/persona/{persona}/cancha/{cancha}/horario', [Reserv
 Route::get('test/ver-reservas', [ReservaController::class, 'verReservas']);
 
 
+
+Route::resource('roles', RolesController::class)->names('roles')->parameter('roles', 'rol');
+Route::resource('modulos', ModuloController::class)->names('modulos')->parameter('modulos', 'modulo');
+
+
+Route::resource('/usuarios', UserController::class)->names('usuarios')->parameters(['usuarios' => 'user']);
+
+
+
+
+
+
+
+
+
+
+
+//BASURA
 Route::get("probando/{dato3}/{dato2}/{dato1}",fn($dato1,$dato2,$dato3) => "Dato 3: $dato3 <br> Dato 1: $dato1 <br> Dato 2 $dato2");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //PROTOTIPO PRIMER INICIO DEL ADMINISTRADOR
 Route::get('/primer-inicio', function() {
     return view('basura.primerInicio');
@@ -167,4 +169,18 @@ Route::get('/sublime-merge', function() {
 
 Route::get('/prueba', function() {
     return view("basura.probando_funciones");
+});
+
+Route::get('test/roles-modulo', function() {
+    $perfil = \App\Models\Perfil::with('modulos')->find(1); // Cambia 1 por el ID del perfil que quieras probar
+    // $perfilConModulos =  $perfil->modulos();
+
+    $modulo = \App\Models\Modulo::with('roles')->find(1);
+    // $moduloConRoles = $modulo->roles();;
+    return response()->json([
+        'perfil' => $perfil,
+        // 'modulos_del_perfil' => $perfilConModulos,
+        'modulo' => $modulo,
+        // 'roles' => $moduloConRoles
+    ]);
 });
