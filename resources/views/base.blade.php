@@ -36,9 +36,8 @@
         </div>
     @endif
     <div class="d-flex">
-        {{-- Barra de navegación Sidebar --}}
         
-        <aside class="bg-dark text-white p-3" style="width: 250px; height: 100vh; position: fixed;">
+        <aside class="bg-light text-white p-3" style="width: 250px; height: 100vh; position: fixed;">
             @include('partials.sidebar_bootstrap')
         </aside>
        

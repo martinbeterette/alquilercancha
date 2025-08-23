@@ -10,11 +10,17 @@ use Illuminate\Http\Request;
 class Persona extends Model
 {
     //
-    use HasFactory /*, SoftDeletes */;
+    use HasFactory , SoftDeletes;
 
     protected $table = 'persona';
     protected $fillable = ['nombre', 'apellido', 'fecha_nacimiento', 'rela_sexo', 'activo'];
 
+
+    public function user()
+    {
+        return $this->hasMany(User::class, 'rela_persona');
+    }
+    
     public function documentos() 
     {
         return $this->hasMany(Documento::class, 'rela_persona');

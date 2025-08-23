@@ -27,7 +27,7 @@ use App\Http\Controllers\ModuloController;
 
 
 
-Route::get('/', [HomeController::class, 'home']);
+Route::get('/', [HomeController::class, 'home'])->middleware(['auth', 'verified']);
 
 
 /*Route::prefix('/personas')->group(function () {

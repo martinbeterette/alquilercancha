@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Sexo;
+use App\Models\TipoDocumento;
 use Illuminate\Http\Request;
 use App\Models\User; 
 use Spatie\Permission\Models\Role;
@@ -18,12 +20,15 @@ class UserController extends Controller
 
     public function create()
     {
-        $roles = Role::all(); // todos los roles disponibles
-        return view('users.create', compact('roles'));
+        $roles              = Role::all(); // todos los roles disponibles
+        $tipos_documento    = TipoDocumento::all();
+        $sexos              = Sexo::all();
+        return view('users.create', compact('roles','tipos_documento','sexos'));
     }
 
     public function store(Request $request)
     {
+        return response()->json($request);
         $request->validate([
             'name' => 'required|string|max:50',
             'email' => 'required|email|unique:users,email',
