@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @if (!session('usuario'))
+  {{--   @if (!session('usuario'))
         <script>
             window.location.href = "{{ url('/login-casero') }}";
         </script>
-    @endif
+    @endif --}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
