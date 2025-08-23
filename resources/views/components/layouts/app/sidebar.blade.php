@@ -14,6 +14,13 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                    @can('usuario.menu')
+                        <flux:navlist.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.index')" wire:navigate>{{ __('Users') }}</flux:navlist.item>
+                    @endcan
+
+                    @can('role.menu')
+                        <flux:navlist.item icon="link-slash" :href="route('roles.index')" :current="request()->routeIs('roles.index')" wire:navigate>{{ __('Roles') }}</flux:navlist.item>
+                    @endcan
                 </flux:navlist.group>
             </flux:navlist>
 
@@ -127,6 +134,13 @@
 
         {{ $slot }}
 
+        @auth
+            @if(auth()->user()->needsPassword())
+                <livewire:dashboard.set-password-modal />
+            @endif
+        @endauth
+
         @fluxScripts
+        @livewireScripts
     </body>
 </html>

@@ -16,7 +16,16 @@ new class extends Component {
             'password' => ['required', 'string', 'current_password'],
         ]);
 
-        tap(Auth::user(), $logout(...))->delete();
+        $user = Auth::user();
+
+        $user->email_verified_at = null;
+        $user->password = null;
+        $user->avatar = null;
+        $user->save();
+
+        $logout($user); // cerrar sesión
+
+        $user->delete(); // soft-delete (marca deleted_at con NOW())
 
         $this->redirect('/', navigate: true);
     }

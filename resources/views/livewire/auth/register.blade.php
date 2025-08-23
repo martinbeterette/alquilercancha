@@ -21,18 +21,48 @@ new #[Layout('components.layouts.auth')] class extends Component {
     {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
 
+        // Buscar usuario soft deleted con ese email
+        $existingUser = User::withTrashed()->where('email', $validated['email'])->first();
+
+        if ($existingUser) {
+            if ($existingUser->trashed()) {
+                // Restaurar el usuario
+                $existingUser->restore();
+
+                // Actualizar datos
+                $existingUser->name = $validated['name'];
+                $existingUser->password = $validated['password'];
+                $existingUser->email_verified_at = null; // forzar verificación de nuevo
+                $existingUser->save();
+
+                // Disparar evento de Registered de nuevo (enviará email de verificación)
+                event(new Registered($existingUser));
+
+                Auth::login($existingUser);
+
+                $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
+                return;
+            } else {
+                // Si el usuario existe y no está soft deleted, lanzar error de validación
+                $this->addError('email', __('This email is already taken.'));
+                return;
+            }
+        }
+
+        // No existe, crear nuevo usuario
         event(new Registered(($user = User::create($validated))));
 
         Auth::login($user);
 
         $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
     }
+
 }; ?>
 
 <div class="flex flex-col gap-6">

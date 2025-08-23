@@ -8,10 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable , HasRoles;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'google_id',
         'facebook_id',
         'email_verified_at',
+        'deleted_at',
     ];
 
     /**
@@ -57,8 +61,14 @@ class User extends Authenticatable implements MustVerifyEmail
         if (!empty($this->google_id) || !empty($this->facebook_id)) {
             return;
         }
-        
+
         $this->notify(new VerifyEmail);
+    }
+
+    // verifica si contraseña es null
+    public function needsPassword(): bool
+    {
+        return (empty($this->password)) && ($this->google_id || $this->facebook_id);
     }
 
     /**
@@ -68,7 +78,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Str::of($this->name)
             ->explode(' ')
-            ->map(fn (string $name) => Str::of($name)->substr(0, 1))
+            ->map(fn(string $name) => Str::of($name)->substr(0, 1))
             ->implode('');
     }
 }
