@@ -21,7 +21,7 @@ class AdminSeeder extends Seeder
     {
         //
 
-        //VERIFICAR SI EXISTE EMAIL
+       /*  //VERIFICAR SI EXISTE EMAIL
         $persona = Persona::create([
             'nombre' => null,
             'apellido' => null,
@@ -43,7 +43,7 @@ class AdminSeeder extends Seeder
             'rela_contacto' => $contacto->id,
             'password' => Hash::make('admin0001'),
             'activo' => true,
-        ]);
+        ]); */
 
         $roleAdmin = Role::where('name', 'admin')->first();
         $roleLoquito = Role::where('name', 'loquito')->first();

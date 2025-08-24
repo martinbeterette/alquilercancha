@@ -15,7 +15,7 @@ class RolSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        /* //
         Rol::create([
             'descripcion' => 'Administrador',
             'activo' => true,
@@ -29,7 +29,7 @@ class RolSeeder extends Seeder
         Rol::create([
             'descripcion' => 'Empleado',
             'activo' => true,
-        ]);
+        ]); */
 
         Role::create([
             'name' => 'admin',

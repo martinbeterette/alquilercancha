@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('modulos', function (Blueprint $table) {
             $table->id();
             $table->string('name');       // Ej: Ventas, Compras
-            $table->string('slug')->unique(); // Ej: ventas, compras (para rutas/menu)
+            $table->string('slug')->nullable(); // Ej: ventas, compras (para rutas/menu)
             $table->string('icon')->nullable(); // opcional, icono para el menú
+            $table->integer('orden')->default(0); // orden de aparición en el menú
             $table->timestamps();
         });
 

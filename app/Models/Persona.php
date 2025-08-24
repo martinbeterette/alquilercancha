@@ -16,7 +16,7 @@ class Persona extends Model
     protected $fillable = ['nombre', 'apellido', 'fecha_nacimiento', 'rela_sexo', 'activo'];
 
 
-    public function user()
+    public function users()
     {
         return $this->hasMany(User::class, 'rela_persona');
     }

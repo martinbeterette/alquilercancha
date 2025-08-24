@@ -7,7 +7,7 @@ use Spatie\Permission\Models\Role;
 
 class Modulo extends Model
 {
-    protected $fillable = ['name', 'slug', 'icon'];
+    protected $fillable = ['name', 'slug', 'icon', 'orden'];
 
     // Relación con roles (muchos a muchos)
     public function roles()

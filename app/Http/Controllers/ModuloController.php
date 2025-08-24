@@ -33,7 +33,7 @@ class ModuloController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:20',
-            'slug' => 'required|string|max:20|unique:modulos,slug',
+            'slug' => 'string|max:50',
             'icon' => 'nullable|string|max:20',
             'roles' => 'nullable|array',
             'roles.*' => 'exists:roles,id', // usamos IDs porque es más simple para el create
@@ -74,7 +74,7 @@ class ModuloController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:20',
-            'slug' => 'required|string|max:20|unique:modulos,slug,' . $modulo->id,
+            'slug' => 'string|max:50',
             'icon' => 'nullable|string|max:20',
             'roles' => 'nullable|array',
             'roles.*' => 'exists:roles,id',

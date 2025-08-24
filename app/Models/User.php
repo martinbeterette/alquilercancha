@@ -48,4 +48,19 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public function persona()
+    {
+        return $this->belongsTo(Persona::class, 'rela_persona');
+    }
+
+    public function getAllModules()
+    {
+        // traemos todos los módulos que tengan al menos un rol que el usuario tiene
+        return Modulo::whereHas('roles', function ($q) {
+            $q->whereIn('roles.id', $this->roles->pluck('id'));
+        })
+        ->orderBy('orden')
+        ->get();
+    }
 }

@@ -1,4 +1,42 @@
-<div class="d-flex flex-column align-items-start h-100 bg-light" style="width: 250px; padding: 1rem;">
+@foreach(auth()->user()->getAllModules() as $modulo)
+    <a href="{{ url($modulo->slug) }}">
+        <i class="{{ $modulo->icon }}"></i> {{ $modulo->name }}
+    </a>
+@endforeach
+@auth
+    <div class="dropdown dropup w-100 mt-auto text-start px-3 mb-3">
+        <button class="btn btn-light w-100 d-flex align-items-center justify-content-between border rounded" type="button" id="dropdownUserMenu" data-mdb-toggle="dropdown" aria-expanded="false">
+            <div class="text-dark">
+                <i class="fas fa-user-circle me-2"></i> {{ Auth::user()->name }}
+            </div>
+            <i class="fas fa-chevron-up text-dark"></i>
+        </button>
+        <ul class="dropdown-menu w-100 shadow-sm" aria-labelledby="dropdownUserMenu">
+            <li>
+                <a class="dropdown-item d-flex align-items-center" href="{{ route('profile.edit') }}">
+                    <i class="fas fa-id-badge me-2"></i> Mi Perfil
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item d-flex align-items-center" href="/configuracion">
+                    <i class="fas fa-sliders-h me-2"></i> Configuración
+                </a>
+            </li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="dropdown-item text-danger d-flex align-items-center">
+                        <i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+    @endauth
+{{-- <div class="d-flex flex-column align-items-start h-100 bg-light" style="width: 250px; padding: 1rem;">
 
     <!-- Logo / Título del sistema -->
     <div class="text-center w-100 mb-4">
@@ -40,37 +78,6 @@
     </ul>
 
     <!-- Usuario con menú desplegable -->
-    @auth
-    <div class="dropdown dropup w-100 mt-auto text-start px-3 mb-3">
-        <button class="btn btn-light w-100 d-flex align-items-center justify-content-between border rounded" type="button" id="dropdownUserMenu" data-mdb-toggle="dropdown" aria-expanded="false">
-            <div class="text-dark">
-                <i class="fas fa-user-circle me-2"></i> {{ Auth::user()->name }}
-            </div>
-            <i class="fas fa-chevron-up text-dark"></i>
-        </button>
-        <ul class="dropdown-menu w-100 shadow-sm" aria-labelledby="dropdownUserMenu">
-            <li>
-                <a class="dropdown-item d-flex align-items-center" href="{{ route('profile.edit') }}">
-                    <i class="fas fa-id-badge me-2"></i> Mi Perfil
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item d-flex align-items-center" href="/configuracion">
-                    <i class="fas fa-sliders-h me-2"></i> Configuración
-                </a>
-            </li>
-            <li>
-                <hr class="dropdown-divider">
-            </li>
-            <li>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="dropdown-item text-danger d-flex align-items-center">
-                        <i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión
-                    </button>
-                </form>
-            </li>
-        </ul>
-    </div>
-    @endauth
+    
 </div>
+ --}}
