@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('apellido')->nullable();
             $table->date('fecha_nacimiento')->nullable();
             $table->foreignId('rela_sexo')->nullable()->constrained('sexo')->nullOnDelete();
-            $table->boolean('activo')->default(true)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

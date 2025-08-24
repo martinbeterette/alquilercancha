@@ -48,11 +48,26 @@ class AdminSeeder extends Seeder
         $roleAdmin = Role::where('name', 'admin')->first();
         $roleLoquito = Role::where('name', 'loquito')->first();
 
+        //creamos la persona
+        $persona = Persona::create([
+            'nombre' => 'admin',
+            'apellido' => 'admin',
+            'fecha_nacimiento' => '0001-01-01',
+            'rela_sexo' => 1,
+        ]);
+
+        //creamos el documento
+        $persona->documentos()->create([
+            'rela_tipo_documento' => 1,
+            'descripcion' => '00000000',
+        ]);
+        //creamos el admin
         $admin = User::create([
             'name' => 'admin123',
             'email' => 'admin123@admin.com',
             'password' => Hash::make('admin123'),
             'email_verified_at' => now(),
+            'rela_persona' => $persona->id,
         ]);
 
         $admin->assignRole($roleAdmin);

@@ -21,7 +21,6 @@ class personaFactory extends Factory
             'apellido' => $this->faker->lastName(),
             'fecha_nacimiento' => $this->faker->date('Y-m-d', '2005-01-01'), 
             'rela_sexo' => $this->faker->numberBetween(1, 2), // 1 = Masculino, 2 = Femenino
-            'activo' => $this->faker->boolean(),
         ];
     }
 }

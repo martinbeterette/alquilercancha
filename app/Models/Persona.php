@@ -13,7 +13,7 @@ class Persona extends Model
     use HasFactory , SoftDeletes;
 
     protected $table = 'persona';
-    protected $fillable = ['nombre', 'apellido', 'fecha_nacimiento', 'rela_sexo', 'activo'];
+    protected $fillable = ['nombre', 'apellido', 'fecha_nacimiento', 'rela_sexo'];
 
 
     public function users()
@@ -23,7 +23,7 @@ class Persona extends Model
     
     public function documentos() 
     {
-        return $this->hasMany(Documento::class, 'rela_persona');
+        return $this->hasOne(Documento::class, 'rela_persona');
     }
 
     public function contactos() 

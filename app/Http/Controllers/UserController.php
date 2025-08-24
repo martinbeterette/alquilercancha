@@ -70,6 +70,7 @@ class UserController extends Controller
         $sexos              = Sexo::all();
         $documento          = $user->persona->documentos->first(); // Asumiendo que un usuario tiene un documento
         $persona            = $user->persona;
+        // dd($persona->fecha_nacimiento);
         return view('users.edit', compact('user', 'roles', 'tipos_documento', 'sexos', 'documento', 'persona'));
     }
 
@@ -96,7 +97,7 @@ class UserController extends Controller
         if ($request->filled('password')) {
             $arrayUser['password'] = Hash::make($request->password);
         }
-        return response()->json(compact('arrayUser','arrayPersona','arrayDocumento'));
+        // return response()->json(compact('arrayUser','arrayPersona','arrayDocumento'));
 
         $user->update($arrayUser);
         $user->persona->update($arrayPersona);
@@ -108,8 +109,12 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        if ($user->id == 1) {
+            return redirect()->route('usuarios.index')->withErrors(['error' => 'No se puede eliminar el usuario administrador']);
+        }
         $user->delete();
         return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado correctamente');
+
     }
 
     private function validarFormularioUsuario(Request $request, ?User $user = null)

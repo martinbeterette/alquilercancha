@@ -17,9 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolSeeder::class,
             TipoContactoSeeder::class,
-            AdminSeeder::class,
-            TipoDocumentoSeeder::class,
             SexoSeeder::class,
+            TipoDocumentoSeeder::class,
+            AdminSeeder::class,
             PersonaSeeder::class,
             PreAjustesSeeder::class,
             ComplejoSeeder::class,

@@ -26,7 +26,7 @@ class ModuloSeeder extends Seeder
             ],
             [
                 'name' => 'Reservas',
-                'slug' => '#',
+                'slug' => '/reserva-interna',
                 'icon' => 'fas fa-calendar-check',
                 'orden' => 3,
             ],
