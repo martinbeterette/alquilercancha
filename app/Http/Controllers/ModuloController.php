@@ -75,7 +75,7 @@ class ModuloController extends Controller
         $request->validate([
             'name' => 'required|string|max:20',
             'slug' => 'string|max:50',
-            'icon' => 'nullable|string|max:20',
+            'icon' => 'nullable|string|max:50',
             'roles' => 'nullable|array',
             'roles.*' => 'exists:roles,id',
         ]);

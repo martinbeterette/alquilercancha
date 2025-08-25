@@ -130,7 +130,7 @@ Route::get('/perfil/cambiar-contraseña', fn() => view('auth_casero.cambiarContr
 Route::post('/perfil/cambiar-contraseña', [UsuarioController::class, 'cambiarContrasena'])->name('cambiarContrasena');
 
 
-Route::get('reserva-interna', fn() => view('reserva.interna'))->name('reserva_interna');
+Route::get('reserva-interna', fn() => view('reserva.interna'))->name('reserva_interna')->middleware(['auth', 'has_module:Reservas']);
 Route::post('crear-cliente-nuevo', [ReservaController::class, 'crearClienteNuevo'])->name('cliente_nuevo.create');
 Route::get('reserva-interna/persona/{persona}/cancha', [ReservaController::class, 'seleccionarHoraYCancha'])->name('seleccionar.hora.y.cancha');
 Route::get('reserva-interna/persona/{persona}/cancha/{cancha}/horario', [ReservaController::class, 'seleccionarHorario'])->name('seleccionar.horario');
