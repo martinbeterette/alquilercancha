@@ -54,7 +54,7 @@ Route::resource('/sucursal', SucursalController::class)->names('sucursal');
 
 //ZONAS 
 Route::resource('/zona', ZonaController::class)->names('zona');
-Route::middleware(['has_module:asndiaubibdowa'])->group(function () {
+Route::middleware(['has_module:reserva'])->group(function () {
     Route::prefix('tablas-maestras')->group(function () {
         //CATALOGO
         Route::get('/', fn() => view('tablasMaestras/tablasMaestras'))->name('tablas_maestras.index');
