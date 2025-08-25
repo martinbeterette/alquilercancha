@@ -76,8 +76,6 @@
             </a>
         </li>
     </ul>
-
-    <!-- Usuario con menú desplegable -->
     
 </div>
  --}}
