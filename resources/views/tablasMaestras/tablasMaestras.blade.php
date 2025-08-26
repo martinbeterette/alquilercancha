@@ -16,6 +16,8 @@
         (object)['titulo' => 'Provincias',              'ruta' => route('provincia.index')], 
         (object)['titulo' => 'Localidades',             'ruta' => route('localidad.index')], 
         (object)['titulo' => 'Barrios',                 'ruta' => route('barrio.index')],
+        (object)['titulo' => 'Metodos de Pago',         'ruta' => route('metodo_pago.index')],
+        (object)['titulo' => 'Estados de Pago',         'ruta' => route('estado_pago.index')],
     ];
 @endphp
 

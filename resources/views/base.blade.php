@@ -6,34 +6,58 @@
     <title>@yield('title')</title>
     <link                   href="{{ asset("vendor/css/bootstrap_mdb.min.css") }}" rel="stylesheet" />
     <link rel="stylesheet"  href="{{ asset("vendor/fontawesome/css/all.min.css") }}">
+    @vite('resources/css/app.css')
     @yield('extra_stylesheets')
 </head>
 <body>
-    {{-- SNACKBAR, HAY QUE MANDARLO A COMPONENTS --}}
+  {{-- SNACKBAR --}}
     @include('partials.snackbar')
+
     <div class="d-flex">
-        
-        <aside class="bg-light text-white p-3" style="width: 250px; height: 100vh; position: fixed;">
+
+        <!-- Botón hamburguesa para móviles -->
+        <button class="btn btn-primary d-md-none m-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Sidebar Desktop -->
+        <aside class="bg-light text-dark p-3 d-none d-md-block" style="width: 250px; height: 100vh; position: fixed;">
             @include('partials.sidebar_bootstrap')
         </aside>
-       
+
+        <!-- Sidebar Mobile (Offcanvas) -->
+        <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="mobileSidebarLabel">Mi Sistema</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+            </div>
+            <div class="offcanvas-body p-0">
+                @include('partials.sidebar_bootstrap')
+            </div>
+        </div>
 
         {{-- Contenido principal --}}
-        <div class="flex-grow-1" style="margin-left: 250px; padding: 20px;">
+        <div class="flex-fill" style="padding: 20px; margin-left: 250px;">
             {{-- Header --}}
-            <main class="container-mt-4">
+            <main class="container mt-4">
                 @yield('content')
             </main>
         </div>
     </div>
 
     {{-- Footer --}}
-
     <footer class="bg-light text-center py-3 mt-4">
         @include('partials.footer')
     </footer>
 
-
+    {{-- Responsive: quitar margin-left en móviles --}}
+    <style>
+        @media (max-width: 767.98px) {
+            div.flex-fill {
+                margin-left: 0 !important;
+            }
+        }
+    </style>
     <script src="{{ asset("vendor/libs/jquery.min.js") }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

@@ -10,6 +10,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\SucursalController;
 use App\Http\Controllers\DeporteController;
+use App\Http\Controllers\EstadoPagoController;
 use App\Http\Controllers\SexoController;
 use App\Http\Controllers\SuperficieController;
 use App\Http\Controllers\TipoContactoController;
@@ -24,7 +25,7 @@ use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\PerfilController as RolesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModuloController;
-
+use App\Http\Controllers\MetodoPagoController;
 
 // PARA LA EXPO DEL MARTES
 Route::get('admin', fn() => view('admin.administracion'))
@@ -58,6 +59,17 @@ Route::resource('/usuarios', UserController::class)
 
 Route::middleware(['auth','verified','has_module:tablas maestras'])->prefix('tablas-maestras')->group(function () {
     Route::get('/', fn() => view('tablasMaestras/tablasMaestras'))->name('tablas_maestras.index');
+    
+    //METODO DE PAGO
+        Route::resource('metodo-pago', MetodoPagoController::class)
+            ->names('metodo_pago')
+            ->parameters(['metodo-pago' => 'metodoPago']);
+
+    //ESTADO DE PAGO
+        Route::resource('estado-pago', EstadoPagoController::class)
+            ->names('estado_pago')
+            ->parameters(['estado-pago' => 'estadoPago']);
+    //CARGO EMPLEADO
 
     // DEPORTE
         Route::get('/deporte', fn() => view('tablasMaestras/deporte/index'))->name('deporte.index');
