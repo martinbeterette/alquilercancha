@@ -2,7 +2,7 @@
 
 @php
     $tablasMaestras = [
-        (object)['titulo' => 'Roles de Usuario',        'ruta' => route('rol.index')],
+        (object)['titulo' => 'Roles de Usuario',        'ruta' => route('roles.index')],
         (object)['titulo' => 'Superficies',             'ruta' => route('superficie.index')],
         (object)['titulo' => 'Sexos',                   'ruta' => route('sexo.index')],
         (object)['titulo' => 'Deportes',                'ruta' => route('deporte.index')],

@@ -26,48 +26,40 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModuloController;
 
 
+// PARA LA EXPO DEL MARTES
+Route::get('admin', fn() => view('admin.administracion'))
+    ->name('admin.config')
+    ->middleware(['auth', 'has_module:Administración']);
 
-Route::get('/', [HomeController::class, 'home'])->middleware(['auth', 'verified']);
+Route::get('/', [HomeController::class, 'home'])
+    ->middleware(['auth', 'verified']);
 
+Route::get('/home', [HomeController::class, 'home'])
+    ->middleware(['auth', 'verified']);
 
-/*Route::prefix('/personas')->group(function () {
-    
-});*/
+Route::resource('/sucursal', SucursalController::class)
+    ->names('sucursal')
+    ->middleware(['auth', 'verified', 'has_module:sucursales']);
 
-Route::get('/personas', [PersonaController::class, 'index']);
+Route::resource('roles', RolesController::class)
+    ->names('roles')
+    ->parameter('roles', 'rol')
+    ->middleware(['auth','verified','has_module:Administración']);
 
-// LOGIN
-Route::get('/login-casero',    [AuthController::class, 'showLoginForm'])->name('login.casero');
-Route::post('/login-casero',   [AuthController::class, 'login']);
-Route::get('/cerrar-sesion', [AuthController::class, 'logout'])->name('logout.casero');
+Route::resource('modulos', ModuloController::class)
+    ->names('modulos')
+    ->parameter('modulos', 'modulo')
+    ->middleware(['auth','verified','has_module:Administración']);
 
-// REGISTRO USUARIO
-Route::get('/formulario-registro', [AuthController::class, 'showRegisterForm'])->name('formularioRegistro');
-Route::post('/registrar-usuario', [AuthController::class, 'recibirFormularioRegistro'])->name('procesarRegistro');
+Route::resource('/usuarios', UserController::class)
+    ->names('usuarios')
+    ->parameters(['usuarios' => 'user'])
+    ->middleware(['auth','verified','has_module:Administración']);
 
-// INICIO
-//prueba
-Route::get('/home', [HomeController::class, 'home']);
+Route::middleware(['auth','verified','has_module:tablas maestras'])->prefix('tablas-maestras')->group(function () {
+    Route::get('/', fn() => view('tablasMaestras/tablasMaestras'))->name('tablas_maestras.index');
 
-// SUCURSALES
-Route::resource('/sucursal', SucursalController::class)->names('sucursal');
-
-//ZONAS 
-Route::resource('/zona', ZonaController::class)->names('zona');
-Route::middleware(['has_module:reserva'])->group(function () {
-    Route::prefix('tablas-maestras')->group(function () {
-        //CATALOGO
-        Route::get('/', fn() => view('tablasMaestras/tablasMaestras'))->name('tablas_maestras.index');
-
-        // ROL
-        Route::get('/rol', fn() => view('tablasMaestras/rol/index'))->name('rol.index');
-        Route::get('/rol/crear', [RolController::class, 'create'])->name('rol.create');
-        Route::post('/rol/crear/insert', [RolController::class, 'store'])->name('rol.insert');
-        Route::get('/rol/modificar/{id}/edit', [RolController::class, 'edit'])->name('rol.edit');
-        Route::put('/rol/modificar/{id}', [RolController::class, 'update'])->name('rol.update');
-        Route::delete('/rol/eliminar/{id}', [RolController::class, 'destroy'])->name('rol.delete');
-
-        // DEPORTE
+    // DEPORTE
         Route::get('/deporte', fn() => view('tablasMaestras/deporte/index'))->name('deporte.index');
         Route::get('/deporte/crear', [DeporteController::class, 'create'])->name('deporte.create');
         Route::post('/deporte/crear/insert', [DeporteController::class, 'store'])->name('deporte.insert');
@@ -121,9 +113,23 @@ Route::middleware(['has_module:reserva'])->group(function () {
         Route::resource('localidad', LocalidadController::class)->names('localidad')->except(['show'])->parameters(['localidad' => 'localidad']);
 
         Route::resource('barrio', BarrioController::class)->names('barrio')->except(['show'])->parameters(['barrio' => 'barrio']);
-
-    });
 });
+
+/*Route::prefix('/personas')->group(function () {
+    
+});*/
+
+
+
+
+// INICIO
+//prueba
+
+// SUCURSALES
+
+//ZONAS 
+Route::resource('/zona', ZonaController::class)->names('zona');
+
 //mi perfil
 Route::get('/mi-perfil', [UsuarioController::class, 'mostrarMiPerfil'])->name('miPerfil');
 Route::get('/perfil/cambiar-contraseña', fn() => view('auth_casero.cambiarContrasena'))->name('actualizarContrasena');
@@ -139,11 +145,7 @@ Route::get('test/ver-reservas', [ReservaController::class, 'verReservas']);
 
 
 
-Route::resource('roles', RolesController::class)->names('roles')->parameter('roles', 'rol');
-Route::resource('modulos', ModuloController::class)->names('modulos')->parameter('modulos', 'modulo');
 
-
-Route::resource('/usuarios', UserController::class)->names('usuarios')->parameters(['usuarios' => 'user']);
 
 
 
@@ -156,7 +158,18 @@ Route::resource('/usuarios', UserController::class)->names('usuarios')->paramete
 
 
 //BASURA
-Route::get("probando/{dato3}/{dato2}/{dato1}",fn($dato1,$dato2,$dato3) => "Dato 3: $dato3 <br> Dato 1: $dato1 <br> Dato 2 $dato2");
+
+/* // LOGIN
+Route::get('/login-casero',    [AuthController::class, 'showLoginForm'])->name('login.casero');
+Route::post('/login-casero',   [AuthController::class, 'login']);
+Route::get('/cerrar-sesion', [AuthController::class, 'logout'])->name('logout.casero');
+
+// REGISTRO USUARIO
+Route::get('/formulario-registro', [AuthController::class, 'showRegisterForm'])->name('formularioRegistro');
+Route::post('/registrar-usuario', [AuthController::class, 'recibirFormularioRegistro'])->name('procesarRegistro');
+ */
+Route::get('/personas', [PersonaController::class, 'index']);
+
 //PROTOTIPO PRIMER INICIO DEL ADMINISTRADOR
 Route::get('/primer-inicio', function() {
     return view('basura.primerInicio');
@@ -171,16 +184,3 @@ Route::get('/prueba', function() {
     return view("basura.probando_funciones");
 });
 
-Route::get('test/roles-modulo', function() {
-    $perfil = \App\Models\Perfil::with('modulos')->find(1); // Cambia 1 por el ID del perfil que quieras probar
-    // $perfilConModulos =  $perfil->modulos();
-
-    $modulo = \App\Models\Modulo::with('roles')->find(1);
-    // $moduloConRoles = $modulo->roles();;
-    return response()->json([
-        'perfil' => $perfil,
-        // 'modulos_del_perfil' => $perfilConModulos,
-        'modulo' => $modulo,
-        // 'roles' => $moduloConRoles
-    ]);
-});

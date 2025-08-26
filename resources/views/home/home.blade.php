@@ -1,6 +1,6 @@
 @extends('base')
 
-@section('title', 'Probando Extensión')
+@section('title', 'Inicio')
 
 @section('extra_stylesheets')
     <style>
@@ -12,52 +12,56 @@
 @endsection
 
 @section('content')
+<div class="container py-5">
+
+    <!-- Banner de bienvenida -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm border-0 p-5 text-center bg-light">
+                <h1 class="fw-bold">¡Bienvenido a Mi Sistema!</h1>
+                <p class="lead text-muted">
+                    {{ auth()->user()->name ?? 'Usuario' }}, este es tu panel principal.
+                </p>
+                <p class="text-secondary mb-0">
+                    Estamos preparando nuevas funcionalidades para que gestiones todo desde aquí 💛
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Próximamente -->
     <div class="row">
         <div class="col-md-12">
-            <div class="card welcome-card p-4 shadow-sm">
-                <h2>Bienvenido a Mi Sistema {{ session('usuario')->username ?? '-' }}</h2>
-                <p class="mb-0">Gestiona usuarios, reservas y más desde este panel centralizado.</p>
+            <div class="card shadow-sm border-0 p-4 bg-light">
+                <h4 class="mb-3 fw-bold">Próximamente:</h4>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="fas fa-store text-primary me-2"></i>
+                        Gestión de Sucursales
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-basketball-ball text-success me-2"></i>
+                        Gestión de Canchas
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-tags text-warning me-2"></i>
+                        Gestión de Tarifas
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-id-card text-info me-2"></i>
+                        Gestión de Socios y Membresías
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-calendar-alt text-danger me-2"></i>
+                        Reservas de Canchas
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 
-    <div class="row mt-4">
-        <!-- Tarjeta de usuarios -->
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-users fa-3x text-primary"></i>
-                    <h5 class="mt-3">Usuarios</h5>
-                    <p>Administra los usuarios del sistema.</p>
-                    <a href="{{ url('/usuarios') }}" class="btn btn-primary">Ir a Usuarios</a>
-                </div>
-            </div>
-        </div>
+</div>
 
-        <!-- Tarjeta de reservas -->
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-calendar-alt fa-3x text-success"></i>
-                    <h5 class="mt-3">Reservas</h5>
-                    <p>Consulta y gestiona las reservas activas.</p>
-                    <a href="{{ url('/reservas') }}" class="btn btn-success">Ver Reservas</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tarjeta de reportes -->
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-chart-line fa-3x text-warning"></i>
-                    <h5 class="mt-3">Reportes</h5>
-                    <p>Visualiza estadísticas y reportes detallados.</p>
-                    <a href="{{ url('/reportes') }}" class="btn btn-warning">Ver Reportes</a>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @section('extra_js')

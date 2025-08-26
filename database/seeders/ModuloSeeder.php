@@ -13,29 +13,41 @@ class ModuloSeeder extends Seeder
         // Creamos algunos módulos que también son menús
         $modulos = [
             [
-                'name' => 'Ventas',
-                'slug' => '#',
-                'icon' => 'fas fa-shopping-cart',
+                'name' => 'Inicio',
+                'slug' => '/home',
+                'icon' => 'fas fa-home',
                 'orden' => 1,
             ],
             [
-                'name' => 'Compras',
-                'slug' => '#',
-                'icon' => 'fas fa-credit-card',
+                'name' => 'Sucursales',
+                'slug' => '/sucursal',
+                'icon' => 'fas fa-store',
                 'orden' => 2,
             ],
             [
-                'name' => 'Reservas',
-                'slug' => '/reserva-interna',
-                'icon' => 'fas fa-calendar-check',
+                'name' => 'Tablas maestras',
+                'slug' => '/tablas-maestras',
+                'icon' => 'fas fa-database',
                 'orden' => 3,
             ],
             [
-                'name' => 'Usuarios',
-                'slug' => '#',
-                'icon' => 'fas fa-users',
+                'name' => 'Administración',
+                'slug' => '/admin',
+                'icon' => 'fas fa-cogs',
                 'orden' => 4,
+            ],/* 
+            [
+                'name' => 'Membresías',
+                'slug' => '/membresias',
+                'icon' => 'fas fa-id-card',
+                'orden' => 5,
             ],
+            [
+                'name' => 'Tarifas',
+                'slug' => '/tarifas',
+                'icon' => 'fas fa-tags',
+                'orden' => 6,
+            ], */
         ];
 
         foreach ($modulos as $data) {
