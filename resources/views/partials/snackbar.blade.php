@@ -1,5 +1,5 @@
  {{-- Errores de validación --}}
-@if ($errors->any())
+@if ($errors instanceof \Illuminate\Support\ViewErrorBag &&     $errors->any())
     <div 
         id="snackbar-errors" 
         class="position-fixed top-0 start-50 translate-middle-x mt-3 alert alert-danger alert-dismissible fade show shadow-lg rounded-3"
@@ -13,6 +13,27 @@
             @endforeach
         </ul>
         <button type="button" onclick="$('#snackbar-errors').hide()" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+@endif
+
+@php
+    $snackbarErrors = session('errors');
+@endphp
+
+@if ($snackbarErrors && !($snackbarErrors instanceof \Illuminate\Support\ViewErrorBag))
+    <div 
+        id="snackbar-snackbar" 
+        class="position-fixed top-0 start-50 translate-middle-x mt-3 alert alert-danger alert-dismissible fade show shadow-lg rounded-3"
+        style="z-index: 1050; min-width: 300px;"
+        role="alert"
+    >
+        <h5 class="alert-heading mb-2">{{ session('message', 'Error') }}</h5>
+        <ul class="mb-0 ps-3">
+            @foreach ($snackbarErrors as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <button type="button" onclick="$('#snackbar-snackbar').hide()" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
     </div>
 @endif
 
