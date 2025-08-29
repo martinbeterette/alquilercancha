@@ -27,11 +27,7 @@ uso:
         <p class="mb-1"><strong>Sucursal:</strong> {{ $sucursal->nombre ?? 'N/A' }}</p>
         <p class="mb-1"><strong>Cancha:</strong> {{ $cancha->descripcion ?? '' }} ({{ $cancha->superficie->descripcion ?? '' }})</p>
         <p class="mb-1"><strong>Fecha:</strong> {{ $fecha }}</p>
-        <p class="mb-1"><strong>Horario:</strong> {{ $hora_desde }} - {{ $hora_hasta }}</p>
+        <p class="mb-1"><strong>Horario:</strong> {{ $horaDesde }} - {{ $horaHasta }}</p>
 
-        <div class="mt-4 d-flex gap-2">
-            <button type="button" class="btn btn-success flex-grow-1" id="btn-confirmar-reserva">Confirmar</button>
-            <button type="button" class="btn btn-outline-secondary flex-grow-1" id="btn-cancelar-reserva">Cancelar</button>
-        </div>
     </div>
 </div>

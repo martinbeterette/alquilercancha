@@ -31,10 +31,16 @@ class ModuloSeeder extends Seeder
                 'orden' => 3,
             ],
             [
+                'name' => 'Reservas',
+                'slug' => '/reservas',
+                'icon' => 'fas fa-calendar-check',
+                'orden' => 4,
+            ],
+            [
                 'name' => 'Administración',
                 'slug' => '/admin',
                 'icon' => 'fas fa-cogs',
-                'orden' => 4,
+                'orden' => 5,
             ],/* 
             [
                 'name' => 'Membresías',

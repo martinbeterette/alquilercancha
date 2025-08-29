@@ -25,7 +25,7 @@
             {{-- Formulario de selección de horario --}}
             <form 
                 id="form-seleccionar-horario" 
-                action="{{ route('crear.reserva', [
+                action="{{ route('preconfirmar.reserva', [
                     'persona' => $persona,
                     'cancha'  => $cancha,
                 ]) }}" 

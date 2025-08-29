@@ -12,19 +12,19 @@ class ComprobanteReserva extends Component
     public $cancha;
     public $sucursal;
     public $fecha;
-    public $hora_desde;
-    public $hora_hasta;
+    public $horaDesde;
+    public $horaHasta;
     /**
      * Create a new component instance.
      */
-    public function __construct($persona, $cancha, $sucursal, $fecha, $hora_desde, $hora_hasta)
+    public function __construct($persona, $cancha, $sucursal, $fecha, $horaDesde, $horaHasta)
     {
         $this->persona = $persona;
         $this->cancha = $cancha;
         $this->sucursal = $sucursal;
         $this->fecha = $fecha;
-        $this->hora_desde = $hora_desde;
-        $this->hora_hasta = $hora_hasta;
+        $this->horaDesde = $horaDesde;
+        $this->horaHasta = $horaHasta;
     }
 
     /**

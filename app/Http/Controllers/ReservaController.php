@@ -57,7 +57,7 @@ class ReservaController extends Controller
         } 
         $reserva = $this->crearReserva($request, $persona, $cancha);
         
-        return "Reserva Creada exitosamente, Reserva ID: {$reserva->id}";
+        return redirect()->route('ver.reservas')->with('success', 'Reserva creada exitosamente.');
     }
 
     /**
@@ -162,6 +162,31 @@ class ReservaController extends Controller
             'persona' => $persona,
             'cancha' => $cancha->load('superficie', 'tipoDeporte'),
         ]);
+    }
+
+    public function preconfirmar(Request $request, Persona $persona, Zona $cancha)
+    {
+        $request->validate([
+            'fecha'       => 'required|date',
+            'hora_desde'  => 'required|date_format:H:i',
+            'hora_hasta'  => 'required|date_format:H:i|after:hora_desde',
+        ]);
+
+        $horaDesde = Carbon::parse($request->input('hora_desde'))->format('H:i:s');
+        $horaHasta = Carbon::parse($request->input('hora_hasta'))->format('H:i:s');
+        $fecha = $request->input('fecha');
+        if (!$this->horarioEstaDisponible(
+            $fecha,
+            $horaDesde, 
+            $horaHasta, 
+            $cancha
+            )
+        ) {
+            // return "esta ocupado";
+            return back()->withErrors(['El horario seleccionado no está disponible. Por favor, elija otro.']);
+        } 
+        $sucursal = $cancha->sucursales()->first();
+        return view('reserva.preconfirmar', compact('persona', 'cancha', 'fecha', 'sucursal', 'horaDesde', 'horaHasta', 'request'));
     }
 
     /**

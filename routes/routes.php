@@ -147,13 +147,18 @@ Route::get('/mi-perfil', [UsuarioController::class, 'mostrarMiPerfil'])->name('m
 Route::get('/perfil/cambiar-contraseña', fn() => view('auth_casero.cambiarContrasena'))->name('actualizarContrasena');
 Route::post('/perfil/cambiar-contraseña', [UsuarioController::class, 'cambiarContrasena'])->name('cambiarContrasena');
 
+//reservas
+Route::middleware(['auth','verified','has_module:reservas'])->group(function () {
 
-Route::get('reserva-interna', fn() => view('reserva.interna'))->name('reserva_interna')->middleware(['auth']);
-Route::post('crear-cliente-nuevo', [ReservaController::class, 'crearClienteNuevo'])->name('cliente_nuevo.create');
-Route::get('reserva-interna/persona/{persona}/cancha', [ReservaController::class, 'seleccionarHoraYCancha'])->name('seleccionar.hora.y.cancha');
-Route::get('reserva-interna/persona/{persona}/cancha/{cancha}/horario', [ReservaController::class, 'seleccionarHorario'])->name('seleccionar.horario');
-Route::post('reserva-interna/persona/{persona}/cancha/{cancha}/horario', [ReservaController::class, 'store'])->name('crear.reserva');
-Route::get('test/ver-reservas', [ReservaController::class, 'verReservas']);
+    Route::get('reservas', fn() => view('reserva.catalogo'))                                                                            ->name('reservas.catalogo');
+    Route::get('reserva-interna', fn() => view('reserva.interna'))                                                                      ->name('reserva_interna');
+    Route::post('crear-cliente-nuevo', [ReservaController::class, 'crearClienteNuevo'])                                                 ->name('cliente_nuevo.create');
+    Route::get('reserva-interna/persona/{persona}/cancha', [ReservaController::class, 'seleccionarHoraYCancha'])                        ->name('seleccionar.hora.y.cancha');
+    Route::get('reserva-interna/persona/{persona}/cancha/{cancha}/horario', [ReservaController::class, 'seleccionarHorario'])           ->name('seleccionar.horario');
+    Route::post('reserva-interna/persona/{persona}/cancha/{cancha}/horario/preconfirmar', [ReservaController::class, 'preconfirmar'])   ->name('preconfirmar.reserva');
+    Route::post('reserva-interna/persona/{persona}/cancha/{cancha}/horario', [ReservaController::class, 'store'])                       ->name('crear.reserva');
+    Route::get('ver-reservas', [ReservaController::class, 'verReservas'])                                                               ->name('ver.reservas');
+});
 
 
 
