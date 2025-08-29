@@ -1,42 +1,40 @@
 @extends('base')
 
-@section('title', 'Reserva Interna')
+@section('title', 'Crear Reserva')
 
 @section('extra_stylesheets')
     {{-- Acá podrías agregar estilos personalizados si querés --}}
 @endsection
 
 @section('content')
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 <div class="container mt-4">
+    <div class="mb-4">
+        <h1 class="fw-bold fs-2">Crear una Reserva</h1>
+        <p class="text-muted mt-2">Primero buscá la persona por contacto (correo o teléfono). Si no existe, podés crear un nuevo cliente.</p>
+    </div>
+
     <div class="card">
         <div class="card-header bg-primary text-white">
             <h5 class="mb-0">Buscar Persona por Contacto</h5>
         </div>
         <div class="card-body">
-            <form id="form-buscar-persona">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="contacto" class="form-label">Contacto (correo o teléfono)</label>
-                        <input type="text" id="contacto" name="contacto" class="form-control" placeholder="Ej: juan@mail.com">
-                    </div>
+            <form id="form-buscar-persona" class="row g-3">
+                <div class="col-md-8">
+                    <input type="text" id="contacto" name="contacto" class="form-control" placeholder="Ej: juan@mail.com o 1122334455" aria-label="Contacto">
                 </div>
-                <button type="submit" id="btn-buscar" class="btn btn-primary">
-                    Buscar
-                </button>
-                {{-- Acá después podés poner el botón o más campos si hace falta --}}
+                <div class="col-md-4 d-grid">
+                    <button type="submit" id="btn-buscar" class="btn btn-primary">
+                        Buscar Persona
+                    </button>
+                </div>
             </form>
         </div>
+
         <div id="resultado-busqueda" class="mt-4">
+            {{-- Card para persona existente --}}
             @include('reserva.componentes.card_cliente_existente', ['persona' => null])
+
+            {{-- Formulario para nuevo cliente --}}
             @include('reserva.componentes.form_cliente_nuevo')
         </div>
     </div>
@@ -74,6 +72,8 @@
                     if (error.response && error.response.status === 404) {
                         $('#card-cliente').addClass('d-none');
                         $('#form-nuevo-cliente').removeClass('d-none');
+                        $('#contacto-nuevo').val(contacto); // Mantener el contacto ingresado
+                        $('#feedback-no-persona').removeClass('d-none'); // Mostramos feedback leve
                     } else {
                         console.error("Error inesperado:", error);
                     }

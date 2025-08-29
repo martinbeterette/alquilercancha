@@ -72,6 +72,11 @@ class AdminSeeder extends Seeder
 
         $admin->assignRole($roleAdmin);
 
+        //bonus: creamos el contacto del admin
+        $persona->contactos()->create([
+            'descripcion' => $admin->email,
+            'rela_tipo_contacto' => 1,
+        ]);
        
     }
 }

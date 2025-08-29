@@ -2,20 +2,8 @@
 
 @section('content')
     <h2>Listado de Reservas</h2>
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Persona</th>
-                <th>Cancha</th>
-                <th>Fecha</th>
-                <th>Hora Desde</th>
-                <th>Hora Hasta</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($reservas as $reserva)
+    <x-table :columns="['ID', 'Persona', 'Zona', 'Fecha', 'Hora Desde', 'Hora Hasta']">
+            @forelse($reservas as $reserva)
                 <tr>
                     <td>{{ $reserva->id }}</td>
                     <td>{{ $reserva->persona->nombre ?? 'N/A' }}</td>
@@ -24,9 +12,13 @@
                     <td>{{ $reserva->hora_desde }}</td>
                     <td>{{ $reserva->hora_hasta }}</td>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            @empty
+                <tr>
+                    <td colspan="6">No hay reservas disponibles.</td>
+                </tr>
+            @endforelse
+    </x-table>
+        
 
     <div class="d-flex justify-content-center">
         {{ $reservas->withQueryString()->links() }}

@@ -1,22 +1,45 @@
 @extends('base')
 
-@section('title', 'Reserva Interna')
+@section('title', 'Crear Reserva')
 
 @section('extra_stylesheets')
     {{-- Acá podrías agregar estilos personalizados si querés --}}
 @endsection
 
 @section('content')
-    <select name="sucursal" id="sucursal">
-        @foreach ($sucursales as $id => $nombre)
-            <option value="{{ $id }}">{{ $nombre }}</option>
-        @endforeach
-    </select>
+<div class="container mt-4">
 
-    <div class="row canchas-container"></div>
+    {{-- Selector de sucursal --}}
+    <div class="mb-4">
+        <label for="sucursal" class="form-label fw-bold">Elegí la sucursal</label>
+        <select name="sucursal" id="sucursal" class="form-select">
+            @foreach ($sucursales as $id => $nombre)
+                <option value="{{ $id }}">{{ $nombre }}</option>
+            @endforeach
+        </select>
+    </div>
 
+    {{-- Contenedor de canchas --}}
+    <div class="row row-cols-1 row-cols-md-3 g-3 canchas-container">
+        {{-- Cada cancha se agregará dinámicamente aquí --}}
+        {{-- Ejemplo de card de cancha:
+        <div class="col">
+            <div class="card shadow-sm rounded">
+                <div class="card-body">
+                    <h5 class="card-title">Cancha 1</h5>
+                    <p class="card-text">Detalles de la cancha...</p>
+                    <button class="btn btn-primary btn-sm">Seleccionar</button>
+                </div>
+            </div>
+        </div>
+        --}}
+    </div>
 
-
+    {{-- Mensaje cuando no haya canchas --}}
+    <div id="no-canchas" class="alert alert-warning mt-3 d-none">
+        No hay canchas disponibles en esta sucursal.
+    </div>
+</div>
 @endsection
 
 @section('extra_js')
@@ -57,7 +80,8 @@
                             <div class="card-body">
                                 <h5 class="card-title">Cancha #${c.id}</h5>
                                 <p class="card-text">
-                                    <strong>Nombre:</strong> ${c.nombre ?? 'Sin nombre'} <br>
+                                    <strong>Nombre:</strong> ${c.descripcion ?? 'Sin nombre'} <br>
+                                    <strong>Superficie:</strong> ${c.superficie.descripcion ?? 'Sin nombre'} <br>
                                     <strong>Tipo:</strong> ${c.tipo_zona.descripcion ?? 'N/A'} <br>
                                     <strong>Sucursal:</strong> ${c.rela_sucursal}
                                 </p>
@@ -76,7 +100,7 @@
         }
     }
     $(document).on('click', '.btn-seleccionar-cancha',  function() {
-        alert(persona);
+        // alert(persona);
         let cancha = $(this).data('id');
         window.location.href = `/reserva-interna/persona/${persona}/cancha/${cancha}/horario`;
     });
