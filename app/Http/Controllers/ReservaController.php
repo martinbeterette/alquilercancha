@@ -192,7 +192,10 @@ class ReservaController extends Controller
     public function verReservas()
     {
         // Traemos todas las reservas con persona y cancha cargadas
-        $reservas = Reserva::with(['persona', 'zona'])->get();
+        $query = Reserva::query();
+        $query->with(['persona', 'zona']);
+        $reservas = $query->paginate(10);
+
 
         return view('reserva.ver_reservas', compact('reservas'));
     }
