@@ -167,9 +167,11 @@ class ReservaController extends Controller
     public function preconfirmar(Request $request, Persona $persona, Zona $cancha)
     {
         $request->validate([
-            'fecha'       => 'required|date',
+            'fecha'       => 'required|date|after_or_equal:today',
             'hora_desde'  => 'required|date_format:H:i',
-            'hora_hasta'  => 'required|date_format:H:i|after:hora_desde',
+            'hora_hasta'  => 'required|date_format:H:i',
+        ], [
+            'fecha.after' => 'La fecha no puede ser una pasada.',
         ]);
 
         $horaDesde = Carbon::parse($request->input('hora_desde'))->format('H:i:s');

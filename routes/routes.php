@@ -160,6 +160,9 @@ Route::middleware(['auth','verified','has_module:reservas'])->group(function () 
     Route::get('ver-reservas', [ReservaController::class, 'verReservas'])                                                               ->name('ver.reservas');
 });
 
+route::get("/test-prueba", function() {
+    return "test prueba";
+});
 
 
 
