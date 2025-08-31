@@ -202,18 +202,26 @@ class ReservaController extends Controller
      */
     private function horarioEstaDisponible(string $fecha, string $horaDesde, string $horaHasta, Zona $cancha): bool
     {
-        $desde = Carbon::parse("{$fecha} {$horaDesde}")->format('H:i:s');
-        $hasta = Carbon::parse("{$fecha} {$horaHasta}")->format('H:i:s');
+        $desde = Carbon::parse("{$fecha} {$horaDesde}");
+        $hasta = Carbon::parse("{$fecha} {$horaHasta}");
+
+        // Si horaHasta es menor que horaDesde, asumimos que es del día siguiente
+        if ($hasta->lessThanOrEqualTo($desde)) {
+            $hasta->addDay();
+        }
 
         $existeCruce = Reserva::where('rela_zona', $cancha->id)
-            ->whereDate('fecha', $fecha)
-            ->where(function($query) use ($desde, $hasta) {
-                $query->where('hora_desde', '<', $hasta)
-                      ->where('hora_hasta', '>', $desde);
-            })
+            ->whereBetween('hora_desde', [$desde, $hasta])
             ->exists();
 
         return !$existeCruce;
+    }
+
+    public function testDisponibilidadHoraria(){
+        $fecha = '';
+        $horaDesde = '';
+        $horaHasta = '';
+        $cancha = Zona::findOrFail(1);
     }
 
     public function verReservas()

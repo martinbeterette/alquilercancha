@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('observacion')->nullable();
             $table->date('fecha');
-            $table->time('hora_desde');
-            $table->time('hora_hasta');
+            $table->datetime('hora_desde');
+            $table->dateTime('hora_hasta');
             $table->decimal('precio', 10, 2)->nullable();
+            $table->decimal('senia', 10,2)->nullable();
             $table->enum('estado', ['Confirmada', 'Pendiente', 'Cancelada','Completada'])->default('Pendiente');
             $table->enum('metodo_pago', ['Efectivo', 'Tarjeta', 'Transferencia', 'Pendiente'])->default('Pendiente');
             $table->enum('tipo_reserva', ['Interna', 'Externa'])->default('Interna');
