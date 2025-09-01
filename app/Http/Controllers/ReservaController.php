@@ -166,17 +166,25 @@ class ReservaController extends Controller
 
     public function preconfirmar(Request $request, Persona $persona, Zona $cancha)
     {
+        // Validaciones básicas
         $request->validate([
             'fecha'       => 'required|date|after_or_equal:today',
-            'hora_desde'  => 'required|date_format:H:i',
-            'hora_hasta'  => 'required|date_format:H:i',
+            'hora_desde'  => 'required|regex:/^\d{2}:\d{2}(:\d{2})?$/',
+            'hora_hasta'  => 'required|regex:/^\d{2}:\d{2}(:\d{2})?$/',
         ], [
             'fecha.after' => 'La fecha no puede ser una pasada.',
+            'hora_desde.required' => 'La hora de inicio es obligatoria.',
+            'hora_hasta.required' => 'La hora de fin es obligatoria.',
+            'hora_desde.regex' => 'El formato de hora de inicio debe ser valido HH:MM o HH:MM:SS.',
+            'hora_hasta.regex' => 'El formato de hora de inicio debe ser valido HH:MM o HH:MM:SS.',
         ]);
 
+        // Formateamos las horas a HH:MM:SS
         $horaDesde = Carbon::parse($request->input('hora_desde'))->format('H:i:s');
         $horaHasta = Carbon::parse($request->input('hora_hasta'))->format('H:i:s');
         $fecha = $request->input('fecha');
+
+        // Verificamos disponibilidad
         if (!$this->horarioEstaDisponible(
             $fecha,
             $horaDesde, 
@@ -184,10 +192,14 @@ class ReservaController extends Controller
             $cancha
             )
         ) {
-            // return "esta ocupado";
+            // si esta ocupado volvermos con error
             return back()->withErrors(['El horario seleccionado no está disponible. Por favor, elija otro.']);
         } 
+
+        // Traemos la sucursal de la cancha
         $sucursal = $cancha->sucursales()->first();
+
+        // mostramos la preconfirmacion con toda la informacion relevante
         return view('reserva.preconfirmar', compact('persona', 'cancha', 'fecha', 'sucursal', 'horaDesde', 'horaHasta', 'request'));
     }
 
@@ -211,17 +223,20 @@ class ReservaController extends Controller
         }
 
         $existeCruce = Reserva::where('rela_zona', $cancha->id)
-            ->whereBetween('hora_desde', [$desde, $hasta])
+            ->where('hora_desde', '<', $hasta)
+            ->where('hora_hasta', '>', $desde)
             ->exists();
 
         return !$existeCruce;
     }
 
     public function testDisponibilidadHoraria(){
-        $fecha = '';
-        $horaDesde = '';
-        $horaHasta = '';
+        $fecha = '2025-09-02';
+        $horaDesde = '00:30';
+        $horaHasta = '01:30';
         $cancha = Zona::findOrFail(1);
+        $disponible = $this->horarioEstaDisponible($fecha, $horaDesde, $horaHasta, $cancha);
+        return $disponible ? '<h1>Disponible</h1>' : '<h1>No disponible</h1>';
     }
 
     public function verReservas()

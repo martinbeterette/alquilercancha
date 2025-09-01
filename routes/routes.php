@@ -160,9 +160,7 @@ Route::middleware(['auth','verified','has_module:reservas'])->group(function () 
     Route::get('ver-reservas', [ReservaController::class, 'verReservas'])                                                               ->name('ver.reservas');
 });
 
-route::get("/test-prueba", function() {
-    return "test prueba";
-});
+Route::get('/test/disponibilidad-horaria', [ReservaController::class, 'testDisponibilidadHoraria']);
 
 
 
@@ -177,30 +175,13 @@ route::get("/test-prueba", function() {
 
 
 
-//BASURA
 
-/* // LOGIN
-Route::get('/login-casero',    [AuthController::class, 'showLoginForm'])->name('login.casero');
-Route::post('/login-casero',   [AuthController::class, 'login']);
-Route::get('/cerrar-sesion', [AuthController::class, 'logout'])->name('logout.casero');
 
-// REGISTRO USUARIO
-Route::get('/formulario-registro', [AuthController::class, 'showRegisterForm'])->name('formularioRegistro');
-Route::post('/registrar-usuario', [AuthController::class, 'recibirFormularioRegistro'])->name('procesarRegistro');
- */
-Route::get('/personas', [PersonaController::class, 'index']);
 
-//PROTOTIPO PRIMER INICIO DEL ADMINISTRADOR
-Route::get('/primer-inicio', function() {
-    return view('basura.primerInicio');
-});
 
-// PRUEBA
-Route::get('/sublime-merge', function() {
-    return view("basura.sublimeMerge");
-});
 
-Route::get('/prueba', function() {
-    return view("basura.probando_funciones");
-});
+
+
+// Route::get('/personas', [PersonaController::class, 'index']);
+
 

@@ -1,0 +1,6 @@
+- Documentar el metodo ReservaController@preConfirmar
+- testear que funcione ReservaController@preconfirmar
+- Modificar ReservaController@store
+- testear
+- definir el esquema de tarifas
+- finalmente relacionar reserva con tarifa 

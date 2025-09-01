@@ -48,7 +48,7 @@ class TestReservaSeeder extends Seeder
 
         // Reserva 3 → día de mañana
         Reserva::create([
-            'observacion'        => 'Reserva de prueba 2',
+            'observacion'        => 'Reserva de prueba 3',
             'fecha'              => '2025-09-01', // Ej: 2025-08-22
             'hora_desde'         => '2025-09-01 23:00:00',
             'hora_hasta'         => '2025-09-02 00:30:00',
