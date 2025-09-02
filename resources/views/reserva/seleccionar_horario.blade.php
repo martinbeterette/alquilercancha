@@ -29,7 +29,7 @@
                     'persona' => $persona,
                     'cancha'  => $cancha,
                 ]) }}" 
-                method="POST"
+                method="GET"
             >
                 @csrf
                 <div class="row g-3 mb-3">
