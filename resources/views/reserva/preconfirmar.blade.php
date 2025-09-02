@@ -10,15 +10,15 @@
         :cancha="$cancha" 
         :sucursal="$sucursal" 
         :fecha="$fecha" 
-        :hora-desde="$horaDesde" 
-        :hora-hasta="$horaHasta" 
+        :fecha-hora-desde="$desde" 
+        :fecha-hora-hasta="$hasta" 
     />
 
     <form action="{{ route('crear.reserva', ['persona' => $persona->id, 'cancha' => $cancha->id]) }}" method="POST" class="mt-3" id="form-confirmacion">
         @csrf
         <input type="hidden" name="fecha" value="{{ $request->fecha }}">
-        <input type="hidden" name="hora_desde" value="{{ $request->hora_desde }}">
-        <input type="hidden" name="hora_hasta" value="{{ $request->hora_hasta }}">
+        <input type="hidden" name="hora_desde" value="{{ $desde }}">
+        <input type="hidden" name="hora_hasta" value="{{ $hasta }}">
 
         <div class="d-flex gap-2">
             <button type="submit" class="btn btn-success flex-grow-1">Confirmar Reserva</button>

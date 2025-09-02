@@ -161,6 +161,7 @@ Route::middleware(['auth','verified','has_module:reservas'])->group(function () 
 });
 
 Route::get('/test/disponibilidad-horaria', [ReservaController::class, 'testDisponibilidadHoraria']);
+Route::get('/test/preconfirmacion', [ReservaController::class, 'testPreConfirmacion']);
 
 
 

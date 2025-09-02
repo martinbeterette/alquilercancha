@@ -168,7 +168,7 @@ class ReservaController extends Controller
     {
         // Validaciones básicas
         $request->validate([
-            'fecha'       => 'required|date|after_or_equal:today',
+            // 'fecha'       => 'required|date|after_or_equal:today',
             'hora_desde'  => 'required|regex:/^\d{2}:\d{2}(:\d{2})?$/',
             'hora_hasta'  => 'required|regex:/^\d{2}:\d{2}(:\d{2})?$/',
         ], [
@@ -194,13 +194,22 @@ class ReservaController extends Controller
         ) {
             // si esta ocupado volvermos con error
             return back()->withErrors(['El horario seleccionado no está disponible. Por favor, elija otro.']);
-        } 
+        }
+
+        //si paso toda la validacion creamos los objetos datetime
+        $desde = Carbon::parse("{$fecha} {$horaDesde}");
+        $hasta = Carbon::parse("{$fecha} {$horaHasta}");
+
+        // Si horaHasta es menor que horaDesde, asumimos que es del día siguiente
+        if ($hasta->lessThanOrEqualTo($desde)) {
+            $hasta->addDay();
+        }
 
         // Traemos la sucursal de la cancha
         $sucursal = $cancha->sucursales()->first();
 
         // mostramos la preconfirmacion con toda la informacion relevante
-        return view('reserva.preconfirmar', compact('persona', 'cancha', 'fecha', 'sucursal', 'horaDesde', 'horaHasta', 'request'));
+        return view('reserva.preconfirmar', compact('persona', 'cancha', 'fecha', 'sucursal', 'desde', 'hasta', 'request'));
     }
 
     /**
@@ -230,6 +239,24 @@ class ReservaController extends Controller
         return !$existeCruce;
     }
 
+    public function testPreConfirmacion() {
+        $request = new Request([
+            "fecha" => "2025-09-01",
+            "hora_desde" => "22:00:00",
+            "hora_hasta" => "23:00:00",
+        ]);
+        
+
+        $persona = Persona::find(1);
+        $cancha = Zona::find(1);
+
+        return $this->preconfirmar($request, $persona, $cancha);
+
+
+
+    }
+
+    //esta funcionando
     public function testDisponibilidadHoraria(){
         $fecha = '2025-09-02';
         $horaDesde = '00:30';
