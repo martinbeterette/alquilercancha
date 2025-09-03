@@ -12,6 +12,7 @@
         :fecha="$fecha" 
         :fecha-hora-desde="$desde" 
         :fecha-hora-hasta="$hasta" 
+        :tarifa-aplicada="$tarifaAplicada"
     />
 
     <form action="{{ route('crear.reserva', ['persona' => $persona->id, 'cancha' => $cancha->id]) }}" method="POST" class="mt-3" id="form-confirmacion">

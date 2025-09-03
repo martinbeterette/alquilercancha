@@ -7,10 +7,12 @@ use App\Models\Contacto;
 use App\Models\Persona;
 use App\Models\Reserva;
 use App\Models\Sucursal;
+use App\Models\Tarifa;
 use App\Models\Zona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 
 class ReservaController extends Controller
 {
@@ -208,8 +210,12 @@ class ReservaController extends Controller
         // Traemos la sucursal de la cancha
         $sucursal = $cancha->sucursales()->first();
 
+        $tarifas = Tarifa::where('rela_sucursal', $cancha->rela_sucursal)->get();
+        $tarifaAplicada = $this->seleccionarTarifa($desde->format('H:i:s'), $tarifas);
+        // return new JsonResponse(["tarifa aplicada" => $tarifaAplicada, "fechayhoradesde" => $desde, "fechayhorahasta" => $hasta]);
+
         // mostramos la preconfirmacion con toda la informacion relevante
-        return view('reserva.preconfirmar', compact('persona', 'cancha', 'fecha', 'sucursal', 'desde', 'hasta', 'request'));
+        return view('reserva.preconfirmar', compact('persona', 'cancha', 'fecha', 'sucursal', 'desde', 'hasta', 'tarifaAplicada','request'));
     }
 
     /**
@@ -275,5 +281,30 @@ class ReservaController extends Controller
 
 
         return view('reserva.ver_reservas', compact('reservas'));
+    }
+
+    private function seleccionarTarifa(string $horaReserva, $tarifas) {
+        $tarifaAplicada = null;
+
+        foreach ($tarifas as $tarifa) {
+            $horaDesdeTarifa = $tarifa->hora_desde;
+            $horaHastaTarifa = $tarifa->hora_hasta;
+
+            if ($horaDesdeTarifa < $horaHastaTarifa) {
+                // Rango normal (ej: 08:00 → 20:00)
+                if ($horaReserva >= $horaDesdeTarifa && $horaReserva < $horaHastaTarifa) {
+                    $tarifaAplicada = $tarifa;
+                    break;
+                }
+            } else {
+                // Rango que cruza medianoche (ej: 20:00 → 02:00)
+                if ($horaReserva >= $horaDesdeTarifa || $horaReserva < $horaHastaTarifa) {
+                    $tarifaAplicada = $tarifa;
+                    break;
+                }
+            }
+        }
+
+        return $tarifaAplicada;
     }
 }

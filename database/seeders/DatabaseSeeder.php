@@ -25,10 +25,8 @@ class DatabaseSeeder extends Seeder
             ComplejoSeeder::class,
             TestReservaSeeder::class,
             ModuloSeeder::class,
+            TarifaSeeder::class,
         ]);
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        
     }
 }

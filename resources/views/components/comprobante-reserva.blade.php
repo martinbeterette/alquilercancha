@@ -28,6 +28,10 @@ uso:
         <p class="mb-1"><strong>Cancha:</strong> {{ $cancha->descripcion ?? '' }} ({{ $cancha->superficie->descripcion ?? '' }})</p>
         <p class="mb-1"><strong>Fecha:</strong> {{ $fecha }}</p>
         <p class="mb-1"><strong>Horario:</strong> {{ $desde }} - {{ $hasta }}</p>
-
+        @if($tarifaAplicada)
+            <hr>
+            <p class="mb-1"><strong>Tarifa aplicada:</strong> {{ $tarifaAplicada->nombre }}</p>
+            <p class="mb-1"><strong>Precio:</strong> ${{ number_format($tarifaAplicada->precio, 2, ',', '.') }}</p>
+        @endif
     </div>
 </div>
