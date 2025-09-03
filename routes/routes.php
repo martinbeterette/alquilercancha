@@ -155,7 +155,7 @@ Route::middleware(['auth','verified','has_module:reservas'])->group(function () 
     Route::post('crear-cliente-nuevo', [ReservaController::class, 'crearClienteNuevo'])                                                 ->name('cliente_nuevo.create');
     Route::get('reserva-interna/persona/{persona}/cancha', [ReservaController::class, 'seleccionarHoraYCancha'])                        ->name('seleccionar.hora.y.cancha');
     Route::get('reserva-interna/persona/{persona}/cancha/{cancha}/horario', [ReservaController::class, 'seleccionarHorario'])           ->name('seleccionar.horario');
-    Route::post('reserva-interna/persona/{persona}/cancha/{cancha}/horario/preconfirmar', [ReservaController::class, 'preconfirmar'])   ->name('preconfirmar.reserva');
+    Route::get('reserva-interna/persona/{persona}/cancha/{cancha}/horario/preconfirmar', [ReservaController::class, 'preconfirmar'])   ->name('preconfirmar.reserva');
     Route::post('reserva-interna/persona/{persona}/cancha/{cancha}/horario', [ReservaController::class, 'store'])                       ->name('crear.reserva');
     Route::get('ver-reservas', [ReservaController::class, 'verReservas'])                                                               ->name('ver.reservas');
 });
