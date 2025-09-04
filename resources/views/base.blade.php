@@ -59,14 +59,11 @@
         }
     </style>
     <script src="{{ asset("vendor/libs/jquery.min.js") }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    {{-- <script src="{{ asset("vendor/libs/bootstrap_popper.min.js") }}"></script> --}}
+    <script src="{{ asset("vendor/libs/bootstrap_popper.min.js") }}"></script>
     <script src="{{ asset("vendor/libs/bootstrap_mdb_ui_kit.min.js") }}"></script>
     <script src="{{ asset("vendor/libs/axios.min.js") }}"></script>
 
-    <!-- VUE -->
-    {{-- <script src="{{ asset("vendor/libs/vue.min.js") }}"></script> --}}
+
     {{-- Aquí irían los JS particulares de la página --}}
     @yield('extra_js')
 </body>
