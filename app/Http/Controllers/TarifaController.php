@@ -36,10 +36,12 @@ class TarifaController extends Controller
     {
         $request->validated();
         $horaDesde = Carbon::parse($request->input('hora-desde'))->format('H:i:s');
-        $horaHasta = Carbon::parse($request->input('hora_hasta'))->format('H:i:s');
+        $horaHasta = Carbon::parse($request->input('hora-hasta'))->format('H:i:s');
         //aca iria una validacion de que no se crucen las tarifas
         if ($this->tarifaEstaPisada($horaDesde, $horaHasta, $sucursal->id)) {
-            return redirect()->route('sucursal.tarifa.index', $sucursal)->withErrors(["La tarifa se superpone a otra existente"]);
+            return redirect()->back()
+                ->withErrors(["La tarifa se superpone a otra existente"])
+                ->withInput();
         }
 
         $tarifa = $sucursal->tarifas()->create([
@@ -65,16 +67,32 @@ class TarifaController extends Controller
      */
     public function edit(Sucursal $sucursal, Tarifa $tarifa)
     {
-        return "editar tarifa";
-
+        return view('tarifa.edit', compact('sucursal', 'tarifa'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sucursal $sucursal, Tarifa $tarifa)
+    public function update(TarifaStoreRequest $request, Sucursal $sucursal, Tarifa $tarifa)
     {
-        return "updatear tarifa";
+        $request->validated();
+        $horaDesde = Carbon::parse($request->input('hora-desde'))->format('H:i:s');
+        $horaHasta = Carbon::parse($request->input('hora-hasta'))->format('H:i:s');
+        //aca iria una validacion de que no se crucen las tarifas
+        if ($this->tarifaEstaPisada($horaDesde, $horaHasta, $sucursal->id)) {
+            return redirect()->back()
+                ->withErrors(["La tarifa se superpone a otra existente"])
+                ->withInput();
+        }
+
+        $tarifa->update([
+            "nombre"        => $request->nombre,
+            "hora_desde"    => $horaDesde,
+            "hora_hasta"    => $horaHasta,
+            "precio"        => $request->precio,
+        ]);
+
+        return redirect()->route('sucursal.tarifa.index', $sucursal)->with('success', "Registro actualizado con exito");
     }
 
     /**
@@ -88,18 +106,40 @@ class TarifaController extends Controller
     }
 
     private function tarifaEstaPisada($horaDesde, $horaHasta, $sucursalId) {
+        $horaInicioSeg = $this->horaEnSegundos($horaDesde);
+        $horaFinSeg = $this->horaEnSegundos($horaHasta);
 
+        $tarifas = Tarifa::where('rela_sucursal', $sucursalId)->get();
 
-        return Tarifa::where('rela_sucursal', $sucursalId)
-            ->where(function($query) use ($horaDesde, $horaHasta) {
-                $query->whereBetween('hora_desde', [$horaDesde, $horaHasta])
-                    ->orWhereBetween('hora_hasta', [$horaDesde, $horaHasta])
-                    ->orWhere(function($q) use ($horaDesde, $horaHasta) {
-                        $q->where('hora_desde', '<=', $horaDesde)
-                            ->where('hora_hasta', '>=', $horaHasta);
-                    });
-            })
-            ->exists();
+        foreach ($tarifas as $t) {
+            $tInicio = $this->horaEnSegundos($t->hora_desde);
+            $tFin = $this->horaEnSegundos($t->hora_hasta);
+
+            // Manejo de cruce de medianoche
+            if ($horaFinSeg < $horaInicioSeg) { // nueva cruza medianoche
+                $intervalos = [
+                    [$horaInicioSeg, 86400],  // hasta 23:59:59
+                    [0, $horaFinSeg],         // desde 00:00
+                ];
+            } else {
+                $intervalos = [[$horaInicioSeg, $horaFinSeg]];
+            }
+
+            foreach ($intervalos as [$inicio, $fin]) {
+                // chequeo simple solapamiento
+                if ($tInicio < $fin && $tFin > $inicio) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private function horaEnSegundos($hora)
+    {
+        [$h, $m, $s] = explode(':', $hora);
+        return $h*3600 + $m*60 + $s;
     }
 
     public function testTarifaPisada()
