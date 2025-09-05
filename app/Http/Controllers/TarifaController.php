@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TarifaStoreRequest;
 use App\Models\Tarifa;
 use Illuminate\Http\Request;
 
 use App\Models\Sucursal;
+use Carbon\Carbon;
 
 class TarifaController extends Controller
 {
@@ -24,33 +26,30 @@ class TarifaController extends Controller
      */
     public function create(Sucursal $sucursal, Tarifa $tarifa)
     {
-        return view('tarifa.create', compact('sucursal', 'tarifas'));
+        return view('tarifa.create', compact('sucursal', 'tarifa'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Sucursal $sucursal)
+    public function store(TarifaStoreRequest $request, Sucursal $sucursal)
     {
-        $request->validate([
-            //reglas
-        ], [
-            //mensajes
-        ]);
-
+        $request->validated();
+        $horaDesde = Carbon::parse($request->input('hora-desde'))->format('H:i:s');
+        $horaHasta = Carbon::parse($request->input('hora_hasta'))->format('H:i:s');
         //aca iria una validacion de que no se crucen las tarifas
-        if ($this->tarifaEstaPisada($request->hora_desde, $request->hora_hasta, $sucursal->id)) {
-            return redirect()->route('sucursal.tarifa.index')->with('error', "La tarifa se superpone a otra existente");
+        if ($this->tarifaEstaPisada($horaDesde, $horaHasta, $sucursal->id)) {
+            return redirect()->route('sucursal.tarifa.index', $sucursal)->withErrors(["La tarifa se superpone a otra existente"]);
         }
 
         $tarifa = $sucursal->tarifas()->create([
             "nombre" => $request->nombre,
-            "hora_desde" => $request->hora_desde,
-            "hora_hasta" => $request->hora_hasta,
+            "hora_desde" => $horaDesde,
+            "hora_hasta" => $horaHasta,
             "precio" => $request->precio,
         ]);
 
-        return redirect()->route('sucursal.tarifa.index')->with('success', "Registro creado con exito");
+        return redirect()->route('sucursal.tarifa.index', $sucursal)->with('success', "Registro creado con exito");
 
     }
 
