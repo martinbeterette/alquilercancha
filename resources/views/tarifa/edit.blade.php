@@ -21,7 +21,7 @@
 
         <div class="mb-3">
             <label for="hora-desde" class="form-label">Hora desde</label>
-            <input type="time" name="hora-desde" id="hora-desde" class="form-control" value="{{ old('hora-desde', $tarifa->hora_hasta) }}">
+            <input type="time" name="hora-desde" id="hora-desde" class="form-control" value="{{ old('hora-desde', $tarifa->hora_desde) }}">
         </div>
 
         <div class="mb-3">
@@ -29,7 +29,7 @@
             <input type="time" name="hora-hasta" id="hora-hasta" class="form-control" value="{{ old('hora-hasta', $tarifa->hora_hasta) }}">
         </div>
 
-        <button type="submit" class="btn btn-success">Crear Tarifa</button>
+        <button type="submit" class="btn btn-success">Actualizar Tarifa</button>
         <a href="{{ route('sucursal.tarifa.index', ["sucursal" => $sucursal]) }}" class="btn btn-secondary">Volver</a>
     </form>
 </div>

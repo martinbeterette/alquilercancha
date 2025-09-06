@@ -23,6 +23,7 @@
         <input type="hidden" name="fecha" value="{{ $request->fecha }}">
         <input type="hidden" name="hora_desde" value="{{ $desde->format('H:i:s') }}">
         <input type="hidden" name="hora_hasta" value="{{ $hasta->format('H:i:s') }}">
+        <input type="hidden" name="precio" value="{{ $tarifaAplicada->precio }}">
 
         {{-- Botones de acción --}}
 

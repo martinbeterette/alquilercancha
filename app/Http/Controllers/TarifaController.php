@@ -37,6 +37,7 @@ class TarifaController extends Controller
         $request->validated();
         $horaDesde = Carbon::parse($request->input('hora-desde'))->format('H:i:s');
         $horaHasta = Carbon::parse($request->input('hora-hasta'))->format('H:i:s');
+
         //aca iria una validacion de que no se crucen las tarifas
         if ($this->tarifaEstaPisada($horaDesde, $horaHasta, $sucursal->id)) {
             return redirect()->back()
@@ -45,10 +46,10 @@ class TarifaController extends Controller
         }
 
         $tarifa = $sucursal->tarifas()->create([
-            "nombre" => $request->nombre,
-            "hora_desde" => $horaDesde,
-            "hora_hasta" => $horaHasta,
-            "precio" => $request->precio,
+            "nombre"        => $request->nombre,
+            "hora_desde"    => $horaDesde,
+            "hora_hasta"    => $horaHasta,
+            "precio"        => $request->precio,
         ]);
 
         return redirect()->route('sucursal.tarifa.index', $sucursal)->with('success', "Registro creado con exito");
@@ -79,7 +80,7 @@ class TarifaController extends Controller
         $horaDesde = Carbon::parse($request->input('hora-desde'))->format('H:i:s');
         $horaHasta = Carbon::parse($request->input('hora-hasta'))->format('H:i:s');
         //aca iria una validacion de que no se crucen las tarifas
-        if ($this->tarifaEstaPisada($horaDesde, $horaHasta, $sucursal->id)) {
+        if ($this->tarifaEstaPisada($horaDesde, $horaHasta, $sucursal->id, $tarifa->id)) {
             return redirect()->back()
                 ->withErrors(["La tarifa se superpone a otra existente"])
                 ->withInput();
@@ -105,48 +106,56 @@ class TarifaController extends Controller
                          ->with('success', 'Tarifa eliminada exitosamente.');
     }
 
-    private function tarifaEstaPisada($horaDesde, $horaHasta, $sucursalId) {
-        $horaInicioSeg = $this->horaEnSegundos($horaDesde);
-        $horaFinSeg = $this->horaEnSegundos($horaHasta);
+    private function tarifaEstaPisada($horaDesde, $horaHasta, $sucursalId, $tarifaId = null) {
+        // Convertir horas a segundos
+        $horaInicioSeg  = $this->horaEnSegundos($horaDesde);
+        $horaFinSeg     = $this->horaEnSegundos($horaHasta);
 
-        $tarifas = Tarifa::where('rela_sucursal', $sucursalId)->get();
-
+        // Obtener todas las tarifas de la sucursal
+        $query = Tarifa::where('rela_sucursal', $sucursalId);
+        if ($tarifaId){
+            $query->where('id', '!=', $tarifaId);
+        }
+        $tarifas = $query->get();
         foreach ($tarifas as $t) {
-            $tInicio = $this->horaEnSegundos($t->hora_desde);
-            $tFin = $this->horaEnSegundos($t->hora_hasta);
+            // Convertir horas de la tarifa existente a segundos
+            $tInicio    = $this->horaEnSegundos($t->hora_desde);
+            $tFin       = $this->horaEnSegundos($t->hora_hasta);
 
-            // Manejo de cruce de medianoche
-            if ($horaFinSeg < $horaInicioSeg) { // nueva cruza medianoche
-                $intervalos = [
-                    [$horaInicioSeg, 86400],  // hasta 23:59:59
-                    [0, $horaFinSeg],         // desde 00:00
-                ];
-            } else {
-                $intervalos = [[$horaInicioSeg, $horaFinSeg]];
+            // Normalizar rangos para manejar cruce de medianoche
+            $nuevoInicio = $horaInicioSeg;
+            $nuevoFin = $horaFinSeg;
+            $existenteInicio = $tInicio;
+            $existenteFin = $tFin;
+
+            // Ajustar si la nueva tarifa cruza medianoche
+            if ($nuevoFin < $nuevoInicio) {
+                $nuevoFin += 86400; // Sumar 24 horas en segundos
+            }
+            // Ajustar si la tarifa existente cruza medianoche
+            if ($tFin < $tInicio) {
+                $existenteFin += 86400; // Sumar 24 horas en segundos
             }
 
-            foreach ($intervalos as [$inicio, $fin]) {
-                // chequeo simple solapamiento
-                if ($tInicio < $fin && $tFin > $inicio) {
-                    return true;
-                }
+            // Verificar solapamiento (usando < y > para permitir que se toquen)
+            if ($nuevoInicio < $existenteFin && $nuevoFin > $existenteInicio) {
+                return true; // Hay solapamiento
             }
         }
 
-        return false;
+        return false; // No hay solapamiento
     }
 
-    private function horaEnSegundos($hora)
-    {
+    private function horaEnSegundos($hora) {
         [$h, $m, $s] = explode(':', $hora);
-        return $h*3600 + $m*60 + $s;
+        return $h * 3600 + $m * 60 + $s;
     }
 
     public function testTarifaPisada()
     {
         // Parámetros "fijos" para testear
-            $horaDesde = '23:59:00';
-            $horaHasta = '00:00:00';
+        $horaDesde = '23:59:00';
+        $horaHasta = '00:00:00';
 
         // Supongamos que queremos testear para la sucursal con id 1
         $sucursalId = 1;

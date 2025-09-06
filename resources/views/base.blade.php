@@ -6,10 +6,16 @@
     <title>@yield('title')</title>
     <link                   href="{{ asset("vendor/css/bootstrap_mdb.min.css") }}" rel="stylesheet" />
     <link rel="stylesheet"  href="{{ asset("vendor/fontawesome/css/all.min.css") }}">
+    {{-- Estilos personalizados para ir a un css a parte --}}
+    <style>
+        .text-django {
+            color: #44B78B !important;
+        }
+    </style>
     @vite('resources/css/app.css')
     @yield('extra_stylesheets')
 </head>
-<body>
+<body class="bg-light">
   {{-- SNACKBAR --}}
     @include('partials.snackbar')
 
