@@ -18,6 +18,7 @@
         (object)['titulo' => 'Barrios',                 'ruta' => route('barrio.index')],
         (object)['titulo' => 'Metodos de Pago',         'ruta' => route('metodo_pago.index')],
         (object)['titulo' => 'Estados de Pago',         'ruta' => route('estado_pago.index')],
+        (object)['titulo' => 'Cargos para Empleados',      'ruta' => route('empleado_cargo.index')],
     ];
 @endphp
 

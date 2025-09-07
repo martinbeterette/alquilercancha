@@ -26,6 +26,11 @@ class Zona extends Model
         return $this->belongsTo(Sucursal::class, 'rela_sucursal');
     }
 
+    public function sucursal()
+    {
+        return $this->belongsTo(Sucursal::class);
+    }
+
     public function tipoZona()
     {
         return $this->belongsTo(TipoZona::class, 'rela_tipo_zona');

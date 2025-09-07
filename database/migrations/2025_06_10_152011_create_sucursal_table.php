@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('direccion');
-            $table->foreignId('rela_complejo')->constrained('complejo')->onDelete('restrict');
+            $table->foreignId('rela_complejo')->constrained('complejo');
             $table->timestamps();
             $table->softDeletes();
         });

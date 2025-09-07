@@ -6,6 +6,7 @@
     <title>@yield('title')</title>
     <link                   href="{{ asset("vendor/css/bootstrap_mdb.min.css") }}" rel="stylesheet" />
     <link rel="stylesheet"  href="{{ asset("vendor/fontawesome/css/all.min.css") }}">
+    @livewireStyles
     @vite('resources/css/app.css')
     @yield('extra_stylesheets')
 </head>
@@ -14,7 +15,6 @@
     @include('partials.snackbar')
 
     <div class="d-flex">
-
         <!-- Botón hamburguesa para móviles -->
         <button class="btn btn-primary d-md-none m-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar">
             <i class="fas fa-bars"></i>
@@ -58,16 +58,14 @@
             }
         }
     </style>
+
     <script src="{{ asset("vendor/libs/jquery.min.js") }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    {{-- <script src="{{ asset("vendor/libs/bootstrap_popper.min.js") }}"></script> --}}
+    <script src="{{ asset("vendor/libs/bootstrap_popper.min.js") }}"></script>
     <script src="{{ asset("vendor/libs/bootstrap_mdb_ui_kit.min.js") }}"></script>
     <script src="{{ asset("vendor/libs/axios.min.js") }}"></script>
 
-    <!-- VUE -->
-    {{-- <script src="{{ asset("vendor/libs/vue.min.js") }}"></script> --}}
-    {{-- Aquí irían los JS particulares de la página --}}
+    @livewireScripts
+    @vite('resources/js/app.js')
     @yield('extra_js')
 </body>
 </html>

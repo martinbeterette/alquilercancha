@@ -37,11 +37,18 @@ class ModuloSeeder extends Seeder
                 'orden' => 4,
             ],
             [
+                'name' => 'Empleados',
+                'slug' => '/empleado',
+                'icon' => 'fas fa-address-card',
+                'orden' => 5,
+            ],
+            [
                 'name' => 'Administración',
                 'slug' => '/admin',
                 'icon' => 'fas fa-cogs',
-                'orden' => 5,
-            ],/* 
+                'orden' => 6,
+            ],
+            /* 
             [
                 'name' => 'Membresías',
                 'slug' => '/membresias',
@@ -53,7 +60,8 @@ class ModuloSeeder extends Seeder
                 'slug' => '/tarifas',
                 'icon' => 'fas fa-tags',
                 'orden' => 6,
-            ], */
+            ],
+            */
         ];
 
         foreach ($modulos as $data) {

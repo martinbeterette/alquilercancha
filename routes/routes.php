@@ -26,6 +26,7 @@ use App\Http\Controllers\PerfilController as RolesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModuloController;
 use App\Http\Controllers\MetodoPagoController;
+use App\Livewire\Empleados\EmpleadoIndex;
 
 // PARA LA EXPO DEL MARTES
 Route::get('admin', fn() => view('admin.administracion'))
@@ -127,18 +128,6 @@ Route::middleware(['auth','verified','has_module:tablas maestras'])->prefix('tab
         Route::resource('barrio', BarrioController::class)->names('barrio')->except(['show'])->parameters(['barrio' => 'barrio']);
 });
 
-/*Route::prefix('/personas')->group(function () {
-    
-});*/
-
-
-
-
-// INICIO
-//prueba
-
-// SUCURSALES
-
 //ZONAS 
 Route::resource('/zona', ZonaController::class)->names('zona');
 
@@ -162,26 +151,6 @@ Route::middleware(['auth','verified','has_module:reservas'])->group(function () 
 
 Route::get('/test/disponibilidad-horaria', [ReservaController::class, 'testDisponibilidadHoraria']);
 
+//Route::get('empleado', [EmpleadoIndex::class, 'empleado.index'])->middleware(['auth','verified','has_module:empleados']);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Route::get('/personas', [PersonaController::class, 'index']);
-
-
+Route::get('socio', fn() => "Socios")->middleware(['auth','verified','has_module:socio']);
