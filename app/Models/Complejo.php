@@ -25,4 +25,14 @@ class Complejo extends Model
             }
         });
     }
+
+    public function membresias()
+    {
+        return $this->hasMany(Membresia::class);
+    }
+
+    public function promociones()
+    {
+        return $this->hasMany(Promocion::class);
+    }
 }

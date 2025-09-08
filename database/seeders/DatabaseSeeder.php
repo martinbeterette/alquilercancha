@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
             ComplejoSeeder::class,
             TestReservaSeeder::class,
             ModuloSeeder::class,
+            MembresiaSeeder::class,
+            PromocionSeeder::class,
         ]);
         User::factory()->create([
             'name' => 'Test User',
