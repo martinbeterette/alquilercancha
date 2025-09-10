@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "@coasys/flux-ui": "^0.10.1-rc4",
-        "intelephense": "^1.14.4"
+        "intelephense": "^1.14.4",
+        "toastr": "^2.1.4"
     }
 }

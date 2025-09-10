@@ -69,6 +69,18 @@
         @livewireScripts
         @fluxScripts
         @vite('resources/js/app.js')
+
+        <script>
+            // Toastr con flash session (opcional)
+            document.addEventListener("DOMContentLoaded", () => {
+                @foreach (['success', 'error', 'info', 'warning'] as $type)
+                    @if(session($type))
+                        toastr["{{ $type }}"]("{{ session($type) }}");
+                    @endif
+                @endforeach
+            });
+        </script>
+
         @yield('extra_js')
     </body>
 </html>

@@ -11,6 +11,11 @@ class Promocion extends Model
 
     protected $table = 'promociones';
 
+    protected $casts = [
+        'fecha_inicio' => 'date',
+        'fecha_fin' => 'date',
+    ];
+
     protected $fillable = [
         'complejo_id',
         'membresia_id',
