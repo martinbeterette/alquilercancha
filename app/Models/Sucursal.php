@@ -27,6 +27,10 @@ class Sucursal extends Model
         return $this->hasMany(Zona::class, 'rela_sucursal');
     }
 
+    public function tarifas() {
+        return $this->hasMany(Tarifa::class, 'rela_sucursal');
+    }
+
     protected static function booted()
     {
         static::deleting(function ($sucursal) {

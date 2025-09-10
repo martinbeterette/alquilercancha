@@ -7,13 +7,30 @@ use App\Models\Contacto;
 use App\Models\Persona;
 use App\Models\Reserva;
 use App\Models\Sucursal;
+use App\Models\Tarifa;
 use App\Models\Zona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 
 class ReservaController extends Controller
 {
+    private $rules = [
+        'fecha'       => 'required|date|after_or_equal:today',
+        'hora_desde'  => 'required|regex:/^\d{2}:\d{2}(:\d{2})?$/',
+        'hora_hasta'  => 'required|regex:/^\d{2}:\d{2}(:\d{2})?$/',
+    ];
+
+    private $messages = [
+        'fecha.required' => 'La fecha es obligatoria.',
+        'fecha.date' => 'La fecha debe ser una fecha válida.',
+        'fecha.after_or_equal' => 'La fecha no puede ser una pasada.',
+        'hora_desde.required' => 'La hora de inicio es obligatoria.',
+        'hora_hasta.required' => 'La hora de fin es obligatoria.',
+        'hora_desde.regex' => 'El formato de hora de inicio debe ser valido HH:MM o HH:MM:SS.',
+        'hora_hasta.regex' => 'El formato de hora de finalizacion debe ser valido HH:MM o HH:MM:SS.',
+    ];
     /**
      * Display a listing of the resource.
      */
@@ -35,27 +52,37 @@ class ReservaController extends Controller
      */
     public function store(Request $request, Persona $persona, Zona $cancha)
     {
-        // Validaciones básicas
-        $request->validate([
-            'fecha'       => 'required|date',
-            'hora_desde'  => 'required|date_format:H:i',
-            'hora_hasta'  => 'required|date_format:H:i|after:hora_desde',
-        ]);
+        // return new JsonResponse($request->all());
 
-        $horaDesde = Carbon::parse($request->input('hora_desde'))->format('H:i:s');
-        $horaHasta = Carbon::parse($request->input('hora_hasta'))->format('H:i:s');
+        // Validaciones básicas
+        $request->validate($this->rules, $this->messages);
+       
+        $fecha      = $request->input('fecha');
+        $horaDesde  = $request->input('hora_desde');
+        $horaHasta  = $request->input('hora_hasta');
+        $precio     = $request->input('precio', null); //opcional
+        $senia      = $request->input('senia', null);  //opcional
 
         if (!$this->horarioEstaDisponible(
-            $request->input('fecha'),
-            $horaDesde, 
-            $horaHasta, 
-            $cancha
-            )
-        ) {
-            // return "esta ocupado";
-            return back()->withErrors(['El horario seleccionado no está disponible. Por favor, elija otro.']);
-        } 
-        $reserva = $this->crearReserva($request, $persona, $cancha);
+                $request->input('fecha'),
+                $horaDesde, 
+                $horaHasta, 
+                $cancha
+                )
+            ) {
+                // return "esta ocupado";
+                return back()->withErrors(['El horario seleccionado no está disponible. Por favor, elija otro.']);
+            } 
+        
+        //si paso toda la validacion creamos los objetos datetime
+        $desde = Carbon::parse("{$fecha} {$horaDesde}");
+        $hasta = Carbon::parse("{$fecha} {$horaHasta}");
+
+        // Si horaHasta es menor que horaDesde, asumimos que es del día siguiente
+        if ($hasta->lessThanOrEqualTo($desde)) {
+            $hasta->addDay();
+        }
+        $reserva = $this->crearReserva($fecha, $desde, $hasta, $persona, $cancha, $precio, $senia);
         
         return redirect()->route('ver.reservas')->with('success', 'Reserva creada exitosamente.');
     }
@@ -106,19 +133,24 @@ class ReservaController extends Controller
 
     /**
      * Metodo aislado para crear la reserva, listo para ser llamado
-     * @param Request $request
-     * @param Persona $persona
-     * @param Zona $cancha
+     * @param string $fecha             Formato 'YYYY-MM-DD'
+     * @param string $fechaHoraDesde    Formato 'HH:MM:SS'
+     * @param string $fechaHoraHasta    Formato 'HH:MM:SS'
+     * @param float|null $precio        Precio de la reserva (opcional)
+     * @param float|null $senia         Señia de la reserva (opcional)
+     * @param Persona $persona          La persona que hace la reserva
+     * @param Zona $cancha              La cancha a reservar
      * @return Reserva|null Devuelve la reserva creada o null si hubo un error (no deberia pasar)
      */ 
-    private function crearReserva(Request $request, Persona $persona, Zona $cancha) : ?Reserva
+    private function crearReserva($fecha, $fechaHoraDesde, $fechaHoraHasta,Persona $persona, Zona $cancha, $precio=null, $senia=null) : Reserva
     {
         return Reserva::create([
-            'observacion'        => $request->input('observacion', null),
-            'fecha'              => $request->input('fecha'),
-            'hora_desde'         => Carbon::parse($request->input('hora_desde'))->format('H:i:s'),
-            'hora_hasta'         => Carbon::parse($request->input('hora_hasta'))->format('H:i:s'),
-            'precio'             => null, // lo vas a calcular con tarifas más adelante
+            'observacion'        => null,
+            'fecha'              => $fecha,
+            'hora_desde'         => $fechaHoraDesde,
+            'hora_hasta'         => $fechaHoraHasta,
+            'precio'             => $precio, // lo vas a calcular con tarifas más adelante
+            'senia'              => $senia, // lo vas a calcular con tarifas más adelante
             'estado'             => 'Pendiente',
             'metodo_pago'        => 'Pendiente',
             'tipo_reserva'       => 'Interna',
@@ -194,13 +226,26 @@ class ReservaController extends Controller
         ) {
             // si esta ocupado volvermos con error
             return back()->withErrors(['El horario seleccionado no está disponible. Por favor, elija otro.']);
-        } 
+        }
+
+        //si paso toda la validacion creamos los objetos datetime
+        $desde = Carbon::parse("{$fecha} {$horaDesde}");
+        $hasta = Carbon::parse("{$fecha} {$horaHasta}");
+
+        // Si horaHasta es menor que horaDesde, asumimos que es del día siguiente
+        if ($hasta->lessThanOrEqualTo($desde)) {
+            $hasta->addDay();
+        }
 
         // Traemos la sucursal de la cancha
         $sucursal = $cancha->sucursales()->first();
 
+        $tarifas = Tarifa::where('rela_sucursal', $cancha->rela_sucursal)->get();
+        $tarifaAplicada = $this->seleccionarTarifa($desde->format('H:i:s'), $tarifas);
+        // return new JsonResponse(["tarifa aplicada" => $tarifaAplicada, "fechayhoradesde" => $desde, "fechayhorahasta" => $hasta]);
+
         // mostramos la preconfirmacion con toda la informacion relevante
-        return view('reserva.preconfirmar', compact('persona', 'cancha', 'fecha', 'sucursal', 'horaDesde', 'horaHasta', 'request'));
+        return view('reserva.preconfirmar', compact('persona', 'cancha', 'fecha', 'sucursal', 'desde', 'hasta', 'tarifaAplicada','request'));
     }
 
     /**
@@ -230,6 +275,24 @@ class ReservaController extends Controller
         return !$existeCruce;
     }
 
+    public function testPreConfirmacion() {
+        $request = new Request([
+            "fecha" => "2025-09-01",
+            "hora_desde" => "22:00:00",
+            "hora_hasta" => "23:00:00",
+        ]);
+        
+
+        $persona = Persona::find(1);
+        $cancha = Zona::find(1);
+
+        return $this->preconfirmar($request, $persona, $cancha);
+
+
+
+    }
+
+    //esta funcionando
     public function testDisponibilidadHoraria(){
         $fecha = '2025-09-02';
         $horaDesde = '00:30';
@@ -248,5 +311,30 @@ class ReservaController extends Controller
 
 
         return view('reserva.ver_reservas', compact('reservas'));
+    }
+
+    private function seleccionarTarifa(string $horaReserva, $tarifas) {
+        $tarifaAplicada = null;
+
+        foreach ($tarifas as $tarifa) {
+            $horaDesdeTarifa = $tarifa->hora_desde;
+            $horaHastaTarifa = $tarifa->hora_hasta;
+
+            if ($horaDesdeTarifa < $horaHastaTarifa) {
+                // Rango normal (ej: 08:00 → 20:00)
+                if ($horaReserva >= $horaDesdeTarifa && $horaReserva < $horaHastaTarifa) {
+                    $tarifaAplicada = $tarifa;
+                    break;
+                }
+            } else {
+                // Rango que cruza medianoche (ej: 20:00 → 02:00)
+                if ($horaReserva >= $horaDesdeTarifa || $horaReserva < $horaHastaTarifa) {
+                    $tarifaAplicada = $tarifa;
+                    break;
+                }
+            }
+        }
+
+        return $tarifaAplicada;
     }
 }

@@ -1,6 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* Tus estilos opcionales */
 body { font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif; }

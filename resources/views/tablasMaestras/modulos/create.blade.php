@@ -1,4 +1,8 @@
 @extends('base')
+@section('extra_stylesheets')
+    <link href="{{ asset('vendor/css/select2.min.css') }}" rel="stylesheet" />
+
+@endsection
 
 @section('content')
 <div class="container my-4">
@@ -21,9 +25,15 @@
 
         {{-- Icon --}}
         <div class="mb-3">
-            <label for="icon" class="form-label">Icono</label>
-            <input type="text" name="icon" id="icon" class="form-control" value="{{ old('icon') }}">
-        </div>
+    <label for="icon" class="form-label">Icono</label>
+        <select name="icon" id="icon" class="form-control">
+            @foreach($icons as $label => $class)
+                <option value="{{ $class }}" data-icon="{{ $class }}" @selected(old('icon') == $class)>
+                    <i class="{{ $class }}"></i> {{ $label }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
         {{-- Roles --}}
         <div class="mb-3">
@@ -44,4 +54,23 @@
         <a href="{{ route('modulos.index') }}" class="btn btn-secondary">Volver</a>
     </form>
 </div>
+@endsection
+
+@section('extra_js')
+<script src="{{ asset('vendor/libs/select2.min.js') }}"></script>
+<script> 
+    $('#icon').select2({
+        templateResult: function(data) {
+            if (!data.id) return data.text;
+            var iconClass = $(data.element).data('icon');
+            return $('<span><i class="' + iconClass + '"></i> ' + data.text + '</span>');
+        },
+        templateSelection: function(data) {
+            if (!data.id) return data.text;
+            var iconClass = $(data.element).data('icon');
+            return $('<span><i class="' + iconClass + '"></i> ' + data.text + '</span>');
+        }
+    });
+</script>
+
 @endsection

@@ -23,7 +23,8 @@ class ModuloController extends Controller
     public function create()
     {
         $roles = Perfil::all(); // todos los roles disponibles
-        return view('tablasMaestras.modulos.create', compact('roles'));
+        $icons = config('fontawesome'); // obtenemos los íconos desde la configuración
+        return view('tablasMaestras.modulos.create', compact('roles', 'icons'));
     }
 
     /**
@@ -33,8 +34,8 @@ class ModuloController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:20',
-            'slug' => 'string|max:50',
-            'icon' => 'nullable|string|max:20',
+            'slug' => 'string|max:100',
+            'icon' => 'nullable|string|max:200',
             'roles' => 'nullable|array',
             'roles.*' => 'exists:roles,id', // usamos IDs porque es más simple para el create
         ]);
@@ -74,8 +75,8 @@ class ModuloController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:20',
-            'slug' => 'string|max:50',
-            'icon' => 'nullable|string|max:50',
+            'slug' => 'string|max:100',
+            'icon' => 'nullable|string|max:200',
             'roles' => 'nullable|array',
             'roles.*' => 'exists:roles,id',
         ]);

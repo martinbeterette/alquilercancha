@@ -41,7 +41,7 @@
             <div class="flex-fill" style="padding: 20px; margin-left: 250px;">
                 {{-- Header --}}
                 <main class="container mt-4">
-                    {{ $slot }}
+                    {{ $slot ?? '' }}
                     @yield('content')
                 </main>
             </div>

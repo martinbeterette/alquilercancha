@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Empleados\EmpleadoIndex;
 use App\Livewire\Membresias\Index as MembresiasIndex;
 
+Route::get('/test-flux', fn () => view('test-flux'));
 require __DIR__.'/routes_breeze.php';
 require __DIR__.'/routes.php';
 

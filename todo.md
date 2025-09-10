@@ -1,6 +1,10 @@
-- Documentar el metodo ReservaController@preConfirmar
-- testear que funcione ReservaController@preconfirmar
-- Modificar ReservaController@store
-- testear
-- definir el esquema de tarifas
-- finalmente relacionar reserva con tarifa 
+Socio
+-id
+-observacion
+-fecha_expiracion
+-creado_por
+-created_at
+-updated_at
+-rela_persona
+-rela_membresia
+-rela_complejo

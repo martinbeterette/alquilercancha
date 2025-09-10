@@ -2,9 +2,29 @@
 
 @section('content')
 <div class="container my-5">
-    <a href="{{ route('sucursal.index') }}" class="btn btn-outline-secondary mb-4">
-        ← Volver a sucursales
-    </a>
+    <div class="d-flex justify-content-between align-items-start">
+        <a href="{{ route('sucursal.index') }}" class="btn btn-outline-secondary mb-4">
+            ← Volver a sucursales
+        </a>
+
+        {{-- Panel de Gestión --}}
+        <div class="card shadow-sm mb-4" style="min-width: 220px;">
+            <div class="card-header bg-body-tertiary">
+                <strong>Gestión</strong>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="{{ route('sucursal.tarifa.index', $sucursal) }}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-dollar-sign me-2 text-django"></i> Tarifas
+                </a>
+                <button class="list-group-item list-group-item-action" disabled>
+                    <i class="fas fa-calendar-alt me-2 text-muted"></i> Itinerarios
+                </button>
+                <button class="list-group-item list-group-item-action" disabled>
+                    <i class="fas fa-users me-2 text-muted"></i> Empleados
+                </button>
+            </div>
+        </div>
+    </div>
 
     <h2 class="mb-3">{{ $sucursal->nombre }}</h2>
     <p class="text-muted">{{ $sucursal->direccion }}</p>
@@ -30,25 +50,17 @@
                                     Superficie: {{ $zona->superficie->descripcion ?? 'N/D' }}
                                 </p>
                             </div>
-                            {{-- Si querés meter un botón de reservar, lo ponés acá --}}
                             <a href="/sucursales/reservar/{{ $zona->id }}" class="btn btn-primary mt-3">Reservar</a>
                             <div class="d-flex justify-content-between mt-3">
                                 <a 
-                                    href="{{ 
-                                        route('zona.edit', 
-                                            [
-                                                'sucursal' => $sucursal->id, 
-                                                "zona" => $zona->id,
-                                            ]
-                                        ) 
-                                    }}" 
+                                    href="{{ route('zona.edit', ['sucursal' => $sucursal->id, 'zona' => $zona->id]) }}" 
                                     class="btn btn-sm btn-outline-primary" 
                                     title="Editar"
                                 >
                                     <i class="fas fa-pen"></i>
                                 </a>
 
-                                <form action="{{ route('zona.destroy', ["zona" => $zona->id]) }}" method="POST" onsubmit="return confirm('¿Estás seguro que querés eliminar esta cancha?');">
+                                <form action="{{ route('zona.destroy', ['zona' => $zona->id]) }}" method="POST" onsubmit="return confirm('¿Estás seguro que querés eliminar esta cancha?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar">

@@ -1,30 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PersonaController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BarrioController;
-use App\Http\Controllers\EstadoZonaController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\RolController;
 use App\Http\Controllers\SucursalController;
-use App\Http\Controllers\DeporteController;
-use App\Http\Controllers\EstadoPagoController;
-use App\Http\Controllers\SexoController;
-use App\Http\Controllers\SuperficieController;
-use App\Http\Controllers\TipoContactoController;
-use App\Http\Controllers\TipoDocumentoController;
-use App\Http\Controllers\TipoZonaController;
-use App\Http\Controllers\EstadoReservaController;
-use App\Http\Controllers\TipoDeporteController;
 use App\Http\Controllers\ZonaController;
-use App\Http\Controllers\ProvinciaController;
-use App\Http\Controllers\LocalidadController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\PerfilController as RolesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModuloController;
+use App\Http\Controllers\TarifaController;
 use App\Http\Controllers\MetodoPagoController;
 use App\Livewire\Empleados\EmpleadoIndex;
 
@@ -58,83 +42,15 @@ Route::resource('/usuarios', UserController::class)
     ->parameters(['usuarios' => 'user'])
     ->middleware(['auth','verified','has_module:Administración']);
 
-Route::middleware(['auth','verified','has_module:tablas maestras'])->prefix('tablas-maestras')->group(function () {
-    Route::get('/', fn() => view('tablasMaestras/tablasMaestras'))->name('tablas_maestras.index');
-    
-    //METODO DE PAGO
-        Route::resource('metodo-pago', MetodoPagoController::class)
-            ->names('metodo_pago')
-            ->parameters(['metodo-pago' => 'metodoPago']);
-
-    //ESTADO DE PAGO
-        Route::resource('estado-pago', EstadoPagoController::class)
-            ->names('estado_pago')
-            ->parameters(['estado-pago' => 'estadoPago']);
-    //CARGO EMPLEADO
-
-    // DEPORTE
-        Route::get('/deporte', fn() => view('tablasMaestras/deporte/index'))->name('deporte.index');
-        Route::get('/deporte/crear', [DeporteController::class, 'create'])->name('deporte.create');
-        Route::post('/deporte/crear/insert', [DeporteController::class, 'store'])->name('deporte.insert');
-        Route::get('/deporte/modificar/{id}/edit', [DeporteController::class, 'edit'])->name('deporte.edit');
-        Route::put('/deporte/modificar/{id}', [DeporteController::class, 'update'])->name('deporte.update');
-        Route::delete('/deporte/eliminar/{id}', [DeporteController::class, 'destroy'])->name('deporte.delete');
-
-        // SEXO
-        Route::get('/sexo', fn() => view('tablasMaestras/sexo/index'))->name('sexo.index');
-        Route::get('/sexo/crear', [SexoController::class, 'create'])->name('sexo.create');
-        Route::post('/sexo/crear/insert', [SexoController::class, 'store'])->name('sexo.insert');
-        Route::get('/sexo/modificar/{id}/edit', [SexoController::class, 'edit'])->name('sexo.edit');
-        Route::put('/sexo/modificar/{id}', [SexoController::class, 'update'])->name('sexo.update');
-        Route::delete('/sexo/eliminar/{id}', [SexoController::class, 'destroy'])->name('sexo.delete');
-
-        // ESTADO ZONA
-        Route::get('/estado-zona', fn() => view('tablasMaestras/estadoZona/index'))->name('estado_zona.index');
-        Route::get('/estado-zona/crear', [EstadoZonaController::class, 'create'])->name('estado_zona.create');
-        Route::post('/estado-zona/crear/insert', [EstadoZonaController::class, 'store'])->name('estado_zona.insert');
-        Route::get('/estado-zona/modificar/{id}/edit', [EstadoZonaController::class, 'edit'])->name('estado_zona.edit');
-        Route::put('/estado-zona/modificar/{id}', [EstadoZonaController::class, 'update'])->name('estado_zona.update');
-        Route::delete('/estado-zona/eliminar/{id}', [EstadoZonaController::class, 'destroy'])->name('estado_zona.delete');
-
-        // SUPERFICIE
-        Route::get('/superficie', fn() => view('tablasMaestras/superficie/index'))->name('superficie.index');
-        Route::get('/superficie/crear', [SuperficieController::class, 'create'])->name('superficie.create');
-        Route::post('/superficie/crear/insert', [SuperficieController::class, 'store'])->name('superficie.insert');
-        Route::get('/superficie/modificar/{id}/edit', [SuperficieController::class, 'edit'])->name('superficie.edit');
-        Route::put('/superficie/modificar/{id}', [SuperficieController::class, 'update'])->name('superficie.update');
-        Route::delete('/superficie/eliminar/{id}', [SuperficieController::class, 'destroy'])->name('superficie.delete');
-
-        //TIPO_CONTACTO
-        Route::resource('tipo-contacto', TipoContactoController::class)->names('tipo_contacto')->except(['show']);
-
-        //TIPO_DOCUMENTO
-        Route::resource('tipo-documento', TipoDocumentoController::class)->names('tipo_documento')->except(['show']);
-
-        //TIPO_ZONA
-        Route::resource('tipo-zona', TipoZonaController::class)->names('tipo_zona')->except(['show']);
-
-        //ESTADO RESERVA
-        Route::resource('estado-reserva', EstadoReservaController::class)->names('estado_reserva')->except(['show']);
-
-        //TIPO DEPORTE
-        Route::resource('tipo-deporte', TipoDeporteController::class)->names('tipo_deporte')->except(['show']);
-
-        //PROVINCIA
-        Route::resource('provincia', ProvinciaController::class)->names('provincia')->except(['show'])->parameters(['provincia' => 'provincia']);
-
-        //LOCALIDAD
-        Route::resource('localidad', LocalidadController::class)->names('localidad')->except(['show'])->parameters(['localidad' => 'localidad']);
-
-        Route::resource('barrio', BarrioController::class)->names('barrio')->except(['show'])->parameters(['barrio' => 'barrio']);
-});
 
 //ZONAS 
 Route::resource('/zona', ZonaController::class)->names('zona');
 
-//mi perfil
-Route::get('/mi-perfil', [UsuarioController::class, 'mostrarMiPerfil'])->name('miPerfil');
-Route::get('/perfil/cambiar-contraseña', fn() => view('auth_casero.cambiarContrasena'))->name('actualizarContrasena');
-Route::post('/perfil/cambiar-contraseña', [UsuarioController::class, 'cambiarContrasena'])->name('cambiarContrasena');
+Route::resource('sucursal.tarifa', TarifaController::class)
+    ->names('sucursal.tarifa')
+    ->parameters(['sucursal' => 'sucursal', 'tarifa' => 'tarifa'])
+    ->middleware(['auth','verified','has_module:sucursales']);
+
 
 //reservas
 Route::middleware(['auth','verified','has_module:reservas'])->group(function () {
@@ -144,13 +60,30 @@ Route::middleware(['auth','verified','has_module:reservas'])->group(function () 
     Route::post('crear-cliente-nuevo', [ReservaController::class, 'crearClienteNuevo'])                                                 ->name('cliente_nuevo.create');
     Route::get('reserva-interna/persona/{persona}/cancha', [ReservaController::class, 'seleccionarHoraYCancha'])                        ->name('seleccionar.hora.y.cancha');
     Route::get('reserva-interna/persona/{persona}/cancha/{cancha}/horario', [ReservaController::class, 'seleccionarHorario'])           ->name('seleccionar.horario');
-    Route::post('reserva-interna/persona/{persona}/cancha/{cancha}/horario/preconfirmar', [ReservaController::class, 'preconfirmar'])   ->name('preconfirmar.reserva');
+    Route::get('reserva-interna/persona/{persona}/cancha/{cancha}/horario/preconfirmar', [ReservaController::class, 'preconfirmar'])   ->name('preconfirmar.reserva');
     Route::post('reserva-interna/persona/{persona}/cancha/{cancha}/horario', [ReservaController::class, 'store'])                       ->name('crear.reserva');
     Route::get('ver-reservas', [ReservaController::class, 'verReservas'])                                                               ->name('ver.reservas');
 });
 
 Route::get('/test/disponibilidad-horaria', [ReservaController::class, 'testDisponibilidadHoraria']);
+Route::get('/test/preconfirmacion', [ReservaController::class, 'testPreConfirmacion']);
+Route::get('/test/tarifa-pisada', [TarifaController::class, 'testTarifaPisada']);
+
+
+
+
+
+
+require __DIR__.'/tablas_maestras.php';
 
 //Route::get('empleado', [EmpleadoIndex::class, 'empleado.index'])->middleware(['auth','verified','has_module:empleados']);
 
-Route::get('socio', fn() => "Socios")->middleware(['auth','verified','has_module:socio']);
+
+
+
+
+
+
+
+
+
