@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "35ee5abbd92fe546db44bb3bac466c22",
+    "content-hash": "6971c0f7600fb331492cb38d66316dda",
     "packages": [
         {
             "name": "brick/math",
@@ -2072,16 +2072,16 @@
         },
         {
             "name": "livewire/flux",
-            "version": "v2.2.6",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/livewire/flux.git",
-                "reference": "a0e8f33a5cd54ead4d8e27721961425ccbae2e33"
+                "reference": "83559c48eb929aa2aa33e351e76b501467111e9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/livewire/flux/zipball/a0e8f33a5cd54ead4d8e27721961425ccbae2e33",
-                "reference": "a0e8f33a5cd54ead4d8e27721961425ccbae2e33",
+                "url": "https://api.github.com/repos/livewire/flux/zipball/83559c48eb929aa2aa33e351e76b501467111e9e",
+                "reference": "83559c48eb929aa2aa33e351e76b501467111e9e",
                 "shasum": ""
             },
             "require": {
@@ -2132,9 +2132,9 @@
             ],
             "support": {
                 "issues": "https://github.com/livewire/flux/issues",
-                "source": "https://github.com/livewire/flux/tree/v2.2.6"
+                "source": "https://github.com/livewire/flux/tree/v2.3.0"
             },
-            "time": "2025-08-27T02:05:01+00:00"
+            "time": "2025-09-03T21:42:14+00:00"
         },
         {
             "name": "livewire/livewire",

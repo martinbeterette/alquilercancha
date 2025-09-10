@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('zona', function (Blueprint $table) {
             $table->id();
             $table->string('descripcion');
-            $table->string('dimension')->nullable();
             $table->foreignId('rela_tipo_deporte')->constrained('tipo_deporte')->onDelete('restrict');
             $table->foreignId('rela_superficie')->constrained('superficie')->onDelete('restrict');
             $table->foreignId('rela_tipo_zona')->constrained('tipo_zona')->onDelete('restrict');
             $table->foreignId('rela_estado_zona')->constrained('estado_zona')->onDelete('restrict');
-            $table->foreignId('rela_sucursal')->constrained('sucursal')->onDelete('restrict');
+            $table->foreignId('rela_sucursal')->constrained('sucursal');
             $table->timestamps();
             $table->softDeletes();
         });

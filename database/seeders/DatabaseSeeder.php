@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             TestReservaSeeder::class,
             ModuloSeeder::class,
             TarifaSeeder::class,
+            MembresiaSeeder::class,
+            PromocionSeeder::class,
         ]);
         
     }

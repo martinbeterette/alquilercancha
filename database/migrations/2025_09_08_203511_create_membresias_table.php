@@ -6,26 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('sucursal', function (Blueprint $table) {
+        Schema::create('membresias', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('complejo_id')->constrained('complejo')->onDelete('cascade');
             $table->string('nombre');
-            $table->string('direccion');
-            $table->foreignId('rela_complejo')->constrained('complejo');
+            $table->text('descripcion')->nullable();
+            $table->decimal('precio', 10, 2);
+            $table->unsignedTinyInteger('descuento_base')->default(0); // %
             $table->timestamps();
             $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('sucursal');
+        Schema::dropIfExists('membresias');
     }
 };

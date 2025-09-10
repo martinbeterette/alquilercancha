@@ -9,6 +9,8 @@ use App\Http\Controllers\PerfilController as RolesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModuloController;
 use App\Http\Controllers\TarifaController;
+use App\Http\Controllers\MetodoPagoController;
+use App\Livewire\Empleados\EmpleadoIndex;
 
 // PARA LA EXPO DEL MARTES
 Route::get('admin', fn() => view('admin.administracion'))
@@ -74,6 +76,7 @@ Route::get('/test/tarifa-pisada', [TarifaController::class, 'testTarifaPisada'])
 
 require __DIR__.'/tablas_maestras.php';
 
+//Route::get('empleado', [EmpleadoIndex::class, 'empleado.index'])->middleware(['auth','verified','has_module:empleados']);
 
 
 
